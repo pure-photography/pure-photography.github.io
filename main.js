@@ -42,6 +42,26 @@
         '19. Balance due: The $10 shoot fee is due on the day of the shoot and must be paid as soon as the session is over.',
         '20. Shoot location: The photographer does not operate a studio. Sessions take place in the client’s home, outdoors at the client’s home, or at another location chosen by the client. If the selected location requires a permit or permission, the client is responsible for securing it before the shoot date.'
     ];
+    // Contract terms for the free-shoot booking page (no payment terms).
+    const freeShootTerms = [
+        '1. Free shoot: This session is completely free. There is no shoot fee and no retainer — nothing is due at booking or on the day of the shoot.',
+        '2. A free reshoot is guaranteed if photographs are lost because of SD card corruption or a camera malfunction.',
+        '3. Turnaround time varies. The client agrees to be flexible, and finished photos will be delivered.',
+        '4. Gallery delivery may be by email or text. For email delivery, the client confirms the email address is valid and working. Photos are kept for 30 days and deleted if not successfully delivered within that time.',
+        '5. Print prices: 5 × 7 — $20 each; 8 × 10 — $30 each; 11 × 14 — $50 each. Shipping and any applicable tax are confirmed separately.',
+        '6. Photographer safety: The photographer reserves the right to end the session and leave the location at any time if she feels unsafe, uncomfortable, or is subjected to harassment of any kind, regardless of how many photographs have been captured.',
+        '7. Rescheduling: Clients who need to reschedule must provide at least 72 hours’ notice before the scheduled start time.',
+        '8. Copyright: Mary Robinson retains full copyright to all photographs. Clients may enjoy and share their delivered images for personal use, but they may not sell the photographer’s work. If a client sells any photograph, the client agrees to pay the photographer the full price for which that photograph was sold.',
+        '9. Model release and social media: By signing this agreement, the client gives the photographer permission to photograph the session. Finished photographs may be used in the photographer’s portfolio or posted to the photographer’s social media accounts, subject to the children’s privacy term below.',
+        '10. Minors: The photographer does not photograph anyone under age 18 unless a parent or legal guardian is present throughout the session.',
+        '11. Children’s privacy: Children’s privacy matters to me, and I love capturing the joy of working with little ones. If you’d prefer your child’s finished photographs stay off social media and my portfolio, let me know in writing before the shoot and I will honor that.',
+        '12. Behind the scenes waiver: I record behind the scenes video at every session using my Ray-Ban Meta glasses and share it on social media. By booking and attending your shoot, you agree that you and any children being photographed may appear in behind the scenes videos. Because this footage is recorded hands-free from my perspective, I cannot guarantee that any person — including children — will be kept out of it. There is no opt-out for behind the scenes video.',
+        '13. Late arrivals and no-shows: If you’re running late, please text the photographer as soon as possible. If 10 minutes have passed after the scheduled start time with no contact, the photographer will call twice and, if there is no answer, begin packing up. The client will also receive one text notification. At 15 minutes with no text explaining the delay, the photographer will consider the appointment a no-call/no-show. The photographer will wait no longer than 30 minutes after the scheduled start time and will then leave. A client who no-call/no-shows for a free shoot may not be offered another free session.',
+        '14. Photo delivery: The client will receive all of the best photographs from the session, as selected at the photographer’s discretion.',
+        '15. Photographer cancellation: If the photographer’s ride falls through, she will call or text the client as soon as possible. If the photographer must cancel because of transportation issues or an emergency, the client will receive a free reschedule.',
+        '16. Weather: If weather conditions, such as rain, prevent an outdoor shoot from taking place, the client will receive a free reschedule.',
+        '17. Shoot location: The photographer does not operate a studio. Sessions take place in the client’s home, outdoors at the client’s home, or at another location chosen by the client. If the selected location requires a permit or permission, the client is responsible for securing it before the shoot date.'
+    ];
         const bookingForm = document.querySelector('#booking-form');
     if (bookingForm) {
     const shootType = document.querySelector('#type');
@@ -56,6 +76,8 @@
       { input: document.querySelector('#qty-8x10'), line: document.querySelector('#line-8x10'), label: document.querySelector('#label-8x10'), amount: document.querySelector('#amount-8x10'), name: '8 × 10 print', price: 30 },
       { input: document.querySelector('#qty-11x14'), line: document.querySelector('#line-11x14'), label: document.querySelector('#label-11x14'), amount: document.querySelector('#amount-11x14'), name: '11 × 14 print', price: 50 }
     ];
+    // Free-shoot booking page has no price calculator — skip all estimate logic there.
+    const hasCalculator = printAddons.every(item => item.input && item.line && item.label && item.amount);
     const estimateSessionName = document.querySelector('#estimate-session-name');
     const estimateSessionPrice = document.querySelector('#estimate-session-price');
     const estimateTotal = document.querySelector('#estimate-total');
@@ -63,6 +85,9 @@
     const copyConfirmation = document.querySelector('#copy-confirmation');
 
     function currentEstimate() {
+      if (!hasCalculator) {
+        return { sessionPrice: 0, retainer: 0, addons: [], printsTotal: 0, hasSessionPrice: true, total: 0, freeShoot: true };
+      }
       const sessionPrice = shootPrice;
       const addons = printAddons.map(item => {
         const quantity = Math.max(0, Math.floor(Number(item.input.value) || 0));
@@ -88,10 +113,10 @@
       copyConfirmation.textContent = '';
     }
 
-    [shootType, ...printAddons.map(item => item.input)].forEach(control => control.addEventListener('input', updateEstimate));
-    updateEstimate();
+    [shootType, ...printAddons.map(item => item.input)].forEach(control => { if (control) control.addEventListener('input', updateEstimate); });
+    if (hasCalculator) updateEstimate();
 
-    copyTotal.addEventListener('click', () => {
+    if (copyTotal) copyTotal.addEventListener('click', () => {
       const estimate = currentEstimate();
       if (!estimate.hasSessionPrice) return;
       const text = dollars.format(estimate.total);
@@ -128,16 +153,25 @@
       if (!f.reportValidity()) return;
       const estimate = currentEstimate();
       const selectedAddons = estimate.addons.filter(item => item.quantity > 0);
-      const itemizedLines = [
-        'Shoot: ' + f.elements.type.value + ' — ' + (estimate.hasSessionPrice ? dollars.format(estimate.sessionPrice) : 'Price to be confirmed'),
-        'Booking retainer — ' + dollars.format(estimate.retainer),
-        ...selectedAddons.map(item => item.name + (item.quantity === 1 ? '' : 's') + ' × ' + item.quantity + ' — ' + dollars.format(item.subtotal))
-      ];
-      if (!selectedAddons.length) itemizedLines.push('Print add-ons: None');
-      itemizedLines.push('Total: ' + (estimate.hasSessionPrice ? dollars.format(estimate.total) : 'To be confirmed'));
+      const itemizedLines = estimate.freeShoot
+        ? [
+            'Shoot: ' + f.elements.type.value + ' — FREE',
+            'Booking retainer — $0.00 (free shoot, nothing due)',
+            'Total: $0.00'
+          ]
+        : [
+            'Shoot: ' + f.elements.type.value + ' — ' + (estimate.hasSessionPrice ? dollars.format(estimate.sessionPrice) : 'Price to be confirmed'),
+            'Booking retainer — ' + dollars.format(estimate.retainer),
+            ...selectedAddons.map(item => item.name + (item.quantity === 1 ? '' : 's') + ' × ' + item.quantity + ' — ' + dollars.format(item.subtotal))
+          ];
+      if (!estimate.freeShoot && !selectedAddons.length) itemizedLines.push('Print add-ons: None');
+      if (!estimate.freeShoot) itemizedLines.push('Total: ' + (estimate.hasSessionPrice ? dollars.format(estimate.total) : 'To be confirmed'));
       const galleryDelivery = deliveryEmail.checked ? 'Email to ' + galleryEmailInput.value : 'Text to ' + phoneInput.value;
-      const subject = encodeURIComponent('Photo shoot request from ' + f.elements.name.value);
-      const body = encodeURIComponent('Hello Pure Photography,\n\nI would like to request a photo shoot.\n\nName: ' + f.elements.name.value + '\nPhone: ' + (f.elements.phone.value || 'Not provided') + '\nPreferred date: ' + f.elements.date.value + '\nGallery delivery: ' + galleryDelivery + '\n\nItemized estimate:\n' + itemizedLines.join('\n') + '\n\nThe current shoot fee is $10 plus the $20 retainer ($30 total). The shoot fee goes up to $50 on New Year\'s Eve at midnight ($70 total with the $20 retainer) — book now to lock in current pricing!\n\nDetails:\n' + f.elements.message.value + '\n');
+      const subject = encodeURIComponent((estimate.freeShoot ? 'FREE shoot request from ' : 'Photo shoot request from ') + f.elements.name.value);
+      const pricingNote = estimate.freeShoot
+        ? 'This is a FREE shoot — no shoot fee and no retainer. Nothing is due.\n\nDetails:\n'
+        : 'The current shoot fee is $10 plus the $20 retainer ($30 total). The shoot fee goes up to $50 on New Year\'s Eve at midnight ($70 total with the $20 retainer) — book now to lock in current pricing!\n\nDetails:\n';
+      const body = encodeURIComponent('Hello Pure Photography,\n\nI would like to request a photo shoot.\n\nName: ' + f.elements.name.value + '\nPhone: ' + (f.elements.phone.value || 'Not provided') + '\nPreferred date: ' + f.elements.date.value + '\nGallery delivery: ' + galleryDelivery + '\n\nItemized estimate:\n' + itemizedLines.join('\n') + '\n\n' + pricingNote + f.elements.message.value + '\n');
       document.querySelector('#booking-status').textContent = 'Thanks for booking! Your email app is opening \u2014 please read and sign the contract below to finish.';
       setTimeout(() => {
         window.location.href = 'mailto:' + mailTo + '?subject=' + subject + '&body=' + body;
@@ -221,7 +255,8 @@
         const signedDate = contractModalForm.elements.agreementDate.value;
         const timestamp = new Date().toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'long' });
         const subject = encodeURIComponent('Signed client agreement: ' + signer);
-        const body = encodeURIComponent('Hello Pure Photography,\n\nI have read and agree to the following terms:\n\n' + contractTerms.join('\n\n') + '\n\nPhotographer signature: Mary Robinson\n\nBy signing below, the client agrees to all terms in this contract.\nClient typed full name: ' + signer + '\nDate: ' + signedDate + '\nTimestamp: ' + timestamp + '\n');
+        const activeTerms = (typeof hasCalculator !== 'undefined' && !hasCalculator) ? freeShootTerms : contractTerms;
+        const body = encodeURIComponent('Hello Pure Photography,\n\nI have read and agree to the following terms:\n\n' + activeTerms.join('\n\n') + '\n\nPhotographer signature: Mary Robinson\n\nBy signing below, the client agrees to all terms in this contract.\nClient typed full name: ' + signer + '\nDate: ' + signedDate + '\nTimestamp: ' + timestamp + '\n');
         modalStatus.textContent = 'Opening your email app with the signed agreement. Review it, then send it to Pure Photography.';
         window.location.href = 'mailto:' + mailTo + '?subject=' + subject + '&body=' + body;
         setTimeout(closeContractModal, 1500);
