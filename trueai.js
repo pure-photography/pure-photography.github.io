@@ -12,19 +12,6 @@
   var booking = null;
   var greeted = false;
 
-  /* Private analytics for Mary's dashboard — fail-silent, no cookies. */
-  function ppLog(type, data){
-    try {
-      var payload = JSON.stringify({type:type, data:data||{}, ts:Date.now()});
-      var url = "/.netlify/functions/log-event";
-      if (navigator.sendBeacon){
-        navigator.sendBeacon(url, new Blob([payload], {type:"application/json"}));
-      } else if (window.fetch){
-        fetch(url, {method:"POST", headers:{"Content-Type":"application/json"}, body:payload, keepalive:true}).catch(function(){});
-      }
-    } catch(e){}
-  }
-  ppLog("pageview", {path: location.pathname, referrer: document.referrer || ""});
   function stripHtml(s){ return String(s).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim(); }
   var KB_LABELS = ["Angel Shoot pricing","Birthday pricing","Engagement pricing","Pet sessions","Session pricing","Services list","Location","No-editing policy","Mary's story","Print pricing","Hours / availability","Contact info","Thanks"];
 
@@ -83,7 +70,6 @@
       booking.date = v;
       var doneBooking = {name: booking.name, session: booking.session, date: booking.date};
       booking = null;
-      ppLog("booking_complete", doneBooking);
       showSummary(doneBooking);
     }
   }
@@ -117,7 +103,7 @@
     mail.href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent("Booking request from " + b.name) +
       "&body=" + encodeURIComponent("Hi Mary,\n\nI'd like to book a session.\n\nName: " + b.name + "\nSession: " + b.session + "\nPreferred date: " + b.date + "\n\nThank you!");
     mail.textContent = "Email my details to Mary";
-    mail.addEventListener("click", function(){ ppLog("booking_email_click", {}); });
+    mail.addEventListener("click", function(){});
     var bookA = document.createElement("a");
     bookA.href = BOOKING_URL; bookA.textContent = "Go to the booking page";
     actions.appendChild(copyBtn); actions.appendChild(mail); actions.appendChild(bookA);
@@ -142,14 +128,12 @@
     addMsg(v, "user", false);
     var q = v.toLowerCase();
     if (booking){ bookingNext(v); return; }
-    if (/\b(book|booking|schedule|appointment|reserve|sign up)\b/.test(q)){ ppLog("booking_start",{}); startBooking(); return; }
-    if (/^(hi|hello|hey|good morning|good afternoon|good evening)\b/.test(q) && q.length < 24){ ppLog("trueai_qa",{question:v, answer_summary:"Greeting from True AI", matched:"greeting"}); say(GREETING); return; }
+    if (/\b(book|booking|schedule|appointment|reserve|sign up)\b/.test(q)){ startBooking(); return; }
+    if (/^(hi|hello|hey|good morning|good afternoon|good evening)\b/.test(q) && q.length < 24){ say(GREETING); return; }
     var m = matchIntent(q);
     if (m){
-      ppLog("trueai_qa",{question:v, answer_summary:stripHtml(m.r).slice(0,220), matched:KB_LABELS[m.i]||"general"});
       say(m.r);
     } else {
-      ppLog("trueai_qa",{question:v, answer_summary:stripHtml(FALLBACK).slice(0,220), matched:"fallback"});
       say(FALLBACK);
     }
   }
