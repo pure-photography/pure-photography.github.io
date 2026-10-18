@@ -271,7 +271,7 @@
         const timestamp = new Date().toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'long' });
         const subject = encodeURIComponent('Signed client agreement: ' + signer);
         const activeTerms = (typeof hasCalculator !== 'undefined' && !hasCalculator) ? freeShootTerms : contractTerms;
-        const body = encodeURIComponent('Hello Pure Photography,\n\nI have read and agree to the following terms:\n\n' + activeTerms.join('\n\n') + '\n\nPhotographer signature: Mary Robinson\n\nBy signing below, the client agrees to all terms in this contract.\nClient typed full name: ' + signer + '\nDate: ' + signedDate + '\nTimestamp: ' + timestamp + '\n');
+        const body = encodeURIComponent('Hello Pure Photography,\n\nI have read and agree to the following terms:\n\n' + activeTerms.join('\n\n') + '\n\nPhotographer signature: Mary Robinson (my signature does not bind this contract; it simply shows that I am offering these terms and my photography services. This agreement becomes binding only when the client signs it.)\n\nBy signing below, the client agrees to all terms in this contract.\nClient typed full name: ' + signer + '\nDate: ' + signedDate + '\nTimestamp: ' + timestamp + '\n');
         modalStatus.textContent = 'Opening your email app with the signed agreement. Review it, then send it to Pure Photography.';
         window.location.href = 'mailto:' + mailTo + '?subject=' + subject + '&body=' + body;
         setTimeout(closeContractModal, 1500);
@@ -307,7 +307,7 @@
       const signedDate = agreementForm.elements.agreementDate.value;
       const timestamp = new Date().toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'long' });
       const subject = encodeURIComponent('Signed client agreement: ' + signer);
-      const body = encodeURIComponent('Hello Pure Photography,\n\nI have read and agree to the following terms:\n\n' + contractTerms.join('\n\n') + '\n\nPhotographer signature: Mary Robinson\n\nBy signing below, the client agrees to all terms in this contract.\nClient typed full name: ' + signer + '\nDate: ' + signedDate + '\nTimestamp: ' + timestamp + '\n');
+      const body = encodeURIComponent('Hello Pure Photography,\n\nI have read and agree to the following terms:\n\n' + contractTerms.join('\n\n') + '\n\nPhotographer signature: Mary Robinson (my signature does not bind this contract; it simply shows that I am offering these terms and my photography services. This agreement becomes binding only when the client signs it.)\n\nBy signing below, the client agrees to all terms in this contract.\nClient typed full name: ' + signer + '\nDate: ' + signedDate + '\nTimestamp: ' + timestamp + '\n');
       document.querySelector('#agreement-status').textContent = 'Opening your email app with the signed agreement. Review it, then send it to Pure Photography.';
       window.location.href = 'mailto:' + mailTo + '?subject=' + subject + '&body=' + body;
     });
