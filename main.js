@@ -29,7 +29,7 @@
         '6. Turnaround time varies. The client agrees to be flexible, and finished photos will be delivered.',
         '7. Gallery delivery may be by email or text. For email delivery, the client confirms the email address is valid and working. Photos are kept for 30 days and deleted if not successfully delivered within that time.',
         '8. Print prices: 5 \u00d7 7 \u2014 $20 each; 8 \u00d7 10 \u2014 $30 each; 11 \u00d7 14 \u2014 $50 each. Shipping and any applicable tax are confirmed separately.',
-        '9. Photographer safety: The photographer reserves the right to end the session and leave the location at any time if she feels unsafe, uncomfortable, or is subjected to harassment of any kind, regardless of how many photographs have been captured. In such cases, the booking fee is nonrefundable.',
+        '9. Photographer safety: The photographer reserves the right to end the session and leave the location at any time if she feels unsafe, uncomfortable, or is subjected to harassment of any kind, regardless of how many photographs have been captured. In such cases, no payments will be refunded.',
         '10. Rescheduling: Clients who need to reschedule must provide at least 72 hours\u2019 notice before the scheduled start time.',
         '11. Copyright and usage: Mary Robinson retains full copyright to all photographs. The client receives a non-exclusive license for personal, non-commercial use only \u2014 this includes sharing on personal social media and printing for home display. Any commercial use, publication, distribution, sale, or use by a third party requires a separate written license and fee. The client agrees not to alter the photographs in any way, including applying filters, cropping out watermarks, or retouching.',
         '12. Model release and social media: By signing this agreement, the client gives the photographer permission to photograph the session. Finished photographs may be used in the photographer\u2019s portfolio or posted to the photographer\u2019s social media accounts, subject to the children\u2019s privacy term below.',
@@ -42,7 +42,8 @@
         '19. Weather: If weather conditions, such as rain, prevent an outdoor shoot from taking place, the client will receive a free reschedule.',
         '20. Balance due: The $10 shoot fee is due on the day of the shoot and must be paid as soon as the session is over.',
         '21. Shoot location: The photographer does not operate a studio. Sessions take place in the client\u2019s home, outdoors at the client\u2019s home, or at another location chosen by the client. If the selected location requires a permit or permission, the client is responsible for securing it before the shoot date.',
-        '22. Force majeure: Neither party is liable for failure to perform due to events beyond reasonable control, including natural disasters, severe weather, fire, illness, or other emergencies. If the photographer cannot perform for these reasons, any payments made will be returned.'
+        '22. Force majeure: Neither party is liable for failure to perform due to events beyond reasonable control, including natural disasters, severe weather, fire, illness, or other emergencies. If the photographer cannot perform for these reasons, any payments made will be returned.',
+        '23. Print and product use: Prints, photo books, and other physical products from Pure Photography \u2014 as well as the digital photographs \u2014 are for the client\u2019s personal enjoyment only. They may be given as gifts or displayed in the client\u2019s home. They may not be handed to any third party for commercial use, resale, or use in other merchandise.'
     ];
     // Contract terms for the free-shoot booking page (no payment terms).
     const freeShootTerms = [
@@ -64,7 +65,8 @@
         '16. Photographer cancellation: If the photographer\u2019s ride falls through, she will call or text the client as soon as possible. If the photographer must cancel because of transportation issues or an emergency, the client will receive a free reschedule.',
         '17. Weather: If weather conditions, such as rain, prevent an outdoor shoot from taking place, the client will receive a free reschedule.',
         '18. Shoot location: The photographer does not operate a studio. Sessions take place in the client\u2019s home, outdoors at the client\u2019s home, or at another location chosen by the client. If the selected location requires a permit or permission, the client is responsible for securing it before the shoot date.',
-        '19. Force majeure: Neither party is liable for failure to perform due to events beyond reasonable control, including natural disasters, severe weather, fire, illness, or other emergencies.'
+        '19. Force majeure: Neither party is liable for failure to perform due to events beyond reasonable control, including natural disasters, severe weather, fire, illness, or other emergencies.',
+        '20. Print and product use: Prints, photo books, and other physical products from Pure Photography \u2014 as well as the digital photographs \u2014 are for the client\u2019s personal enjoyment only. They may be given as gifts or displayed in the client\u2019s home. They may not be handed to any third party for commercial use, resale, or use in other merchandise.'
     ];
         const bookingForm = document.querySelector('#booking-form');
     if (bookingForm) {
