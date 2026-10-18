@@ -78,7 +78,7 @@
     ];
     // Free-shoot gate: Mary texts/DMs this code to free-shoot clients.
     // To change it, just tell Hannah the new code.
-    const FREE_SHOOT_CODE = 'MARYFREE';
+    const FREE_SHOOT_CODE = 'maryfree';
     // Free-shoot booking page has no price calculator — skip all estimate logic there.
     const hasCalculator = printAddons.every(item => item.input && item.line && item.label && item.amount);
     const estimateSessionName = document.querySelector('#estimate-session-name');
@@ -159,7 +159,7 @@
       if (estimate.freeShoot) {
         const codeInput = document.querySelector('#free-shoot-code');
         const codeStatus = document.querySelector('#free-shoot-code-status');
-        const entered = (codeInput && codeInput.value || '').trim().toUpperCase();
+        const entered = (codeInput && codeInput.value || '').trim().toLowerCase();
         if (entered !== FREE_SHOOT_CODE) {
           if (codeStatus) codeStatus.textContent = 'That code doesn\u2019t match. Please check the code Mary sent you by text or DM and try again.';
           if (codeInput) { codeInput.focus(); codeInput.select(); }
