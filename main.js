@@ -76,6 +76,9 @@
       { input: document.querySelector('#qty-8x10'), line: document.querySelector('#line-8x10'), label: document.querySelector('#label-8x10'), amount: document.querySelector('#amount-8x10'), name: '8 × 10 print', price: 30 },
       { input: document.querySelector('#qty-11x14'), line: document.querySelector('#line-11x14'), label: document.querySelector('#label-11x14'), amount: document.querySelector('#amount-11x14'), name: '11 × 14 print', price: 50 }
     ];
+    // Free-shoot gate: Mary texts/DMs this code to free-shoot clients.
+    // To change it, just tell Hannah the new code.
+    const FREE_SHOOT_CODE = 'MARYFREE';
     // Free-shoot booking page has no price calculator — skip all estimate logic there.
     const hasCalculator = printAddons.every(item => item.input && item.line && item.label && item.amount);
     const estimateSessionName = document.querySelector('#estimate-session-name');
@@ -152,6 +155,18 @@
       const f = event.currentTarget;
       if (!f.reportValidity()) return;
       const estimate = currentEstimate();
+      // Free-shoot gate: code must match what Mary sent by text/DM.
+      if (estimate.freeShoot) {
+        const codeInput = document.querySelector('#free-shoot-code');
+        const codeStatus = document.querySelector('#free-shoot-code-status');
+        const entered = (codeInput && codeInput.value || '').trim().toUpperCase();
+        if (entered !== FREE_SHOOT_CODE) {
+          if (codeStatus) codeStatus.textContent = 'That code doesn\u2019t match. Please check the code Mary sent you by text or DM and try again.';
+          if (codeInput) { codeInput.focus(); codeInput.select(); }
+          return;
+        }
+        if (codeStatus) codeStatus.textContent = '';
+      }
       const selectedAddons = estimate.addons.filter(item => item.quantity > 0);
       const itemizedLines = estimate.freeShoot
         ? [
