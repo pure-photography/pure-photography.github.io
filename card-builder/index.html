@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Your Holiday Cards — Pure Photography</title>
+<meta name="description" content="Pure Photography clients: pick photos from any of your sessions and turn them into holiday cards.">
+<style>
+  :root { --pink: #e91e63; --dark: #1a1a2e; --light: #fdf6f0; --accent: #ff6b9d; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, 'Times New Roman', serif; background: var(--light); color: var(--dark); line-height: 1.6; }
+  header { background: var(--dark); color: #fff; text-align: center; padding: 2rem 1rem; }
+  header h1 { font-size: 1.8rem; margin-bottom: .5rem; }
+  header p { color: var(--accent); }
+  main { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+  .card { background: #fff; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  label { display: block; font-weight: bold; margin: .75rem 0 .25rem; }
+  input[type="email"], input[type="text"], input[type="tel"], input[type="number"], textarea {
+    width: 100%; padding: .7rem; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: inherit;
+  }
+  input:focus, textarea:focus, button:focus { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .button { display: inline-block; background: var(--pink); color: #fff; border: none; border-radius: 8px; padding: .8rem 1.6rem; font-size: 1.05rem; cursor: pointer; margin-top: 1rem; font-family: inherit; }
+  .button:disabled { opacity: .6; cursor: wait; }
+  .error { color: #c62828; min-height: 1.5rem; margin-top: .5rem; }
+  .gallery-section { margin-bottom: 2rem; }
+  .gallery-section h3 { margin-bottom: .25rem; }
+  .gallery-section .meta { color: #666; font-size: .95rem; margin-bottom: .75rem; }
+  .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+  .photo-pick { border: 3px solid #eee; border-radius: 10px; overflow: hidden; cursor: pointer; position: relative; background: #fff; }
+  .photo-pick img { width: 100%; height: 150px; object-fit: cover; display: block; }
+  .photo-pick .pick-label { padding: .5rem; font-size: .9rem; display: flex; gap: .5rem; align-items: flex-start; }
+  .photo-pick input { width: 1.2rem; height: 1.2rem; margin-top: .15rem; flex-shrink: 0; }
+  .photo-pick.selected { border-color: var(--pink); }
+  .photo-pick.selected::after { content: "✓"; position: absolute; top: .4rem; right: .4rem; background: var(--pink); color: #fff; width: 1.8rem; height: 1.8rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+  .summary { background: var(--dark); color: #fff; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
+  .summary strong { color: var(--accent); }
+  .fine { font-size: .9rem; color: #666; }
+  .skip-link { position: absolute; left: -9999px; }
+  .skip-link:focus { left: 1rem; top: 1rem; z-index: 2000; background: #fff; padding: .5rem 1rem; }
+  @media (max-width: 600px) { .photo-grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<header>
+  <h1>Design Your Holiday Cards</h1>
+  <p>Pure Photography — true to color</p>
+</header>
+<main id="main">
+
+  <!-- Step 1: client verification gate -->
+  <section id="gate" class="card" aria-labelledby="gate-heading">
+    <h2 id="gate-heading">Your private card studio</h2>
+    <p>Holiday cards are only for Pure Photography clients. Enter the email address you used when you booked your session, and we'll pull up <strong>every photo from every session</strong> you've had — pick your favorites for your cards.</p>
+    <label for="client-email">Email address you booked with</label>
+    <input type="email" id="client-email" autocomplete="email" inputmode="email" required aria-describedby="gate-error">
+    <p id="gate-error" class="error" role="alert"></p>
+    <button type="button" class="button" id="gate-btn">Show my photos</button>
+  </section>
+
+  <!-- Step 2: photo picker (hidden until verified) -->
+  <div id="studio" hidden>
+    <section class="card" aria-labelledby="pick-heading">
+      <h2 id="pick-heading" tabindex="-1">Pick your card photos</h2>
+      <p>These are all the photos from your sessions. Check every photo you'd like on your holiday cards — <strong>pack of 40 for $45</strong>.</p>
+      <div id="galleries"></div>
+    </section>
+
+    <section class="summary" aria-live="polite" aria-label="Order summary">
+      <span id="summary-text">No photos selected yet.</span>
+    </section>
+
+    <section class="card" aria-labelledby="order-heading">
+      <h2 id="order-heading">Your card order</h2>
+      <form id="card-order-form" data-require-client>
+        <label for="packs">Number of packs (40 cards per pack — $45 each)</label>
+        <input type="number" id="packs" name="packs" min="1" value="1" inputmode="numeric" required>
+
+        <label for="ord-name">Your name</label>
+        <input type="text" id="ord-name" name="name" autocomplete="name" required>
+
+        <label for="ord-email">Email</label>
+        <input type="email" id="ord-email" name="email" autocomplete="email" required>
+
+        <label for="ord-phone">Phone</label>
+        <input type="tel" id="ord-phone" name="phone" autocomplete="tel">
+
+        <label for="ord-address">Shipping address</label>
+        <textarea id="ord-address" name="address" rows="3" autocomplete="street-address" required></textarea>
+
+        <label for="ord-notes">Delivery instructions <span class="fine">(optional)</span></label>
+        <textarea id="ord-notes" name="delivery_instructions" rows="2"></textarea>
+
+        <p class="fine">Cards are printed from the photos you picked above and shipped to you with tracking (UPS or USPS).</p>
+        <button type="submit" class="button">Send my card order</button>
+        <p class="error" id="order-error" role="alert"></p>
+        <p class="fine" id="order-done" role="status"></p>
+      </form>
+    </section>
+  </div>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var SITE = 'https://pure-photography.github.io';
+  var CARD_PRICE = 45;
+
+  var gate = document.getElementById('gate');
+  var gateInput = document.getElementById('client-email');
+  var gateBtn = document.getElementById('gate-btn');
+  var gateError = document.getElementById('gate-error');
+  var studio = document.getElementById('studio');
+  var galleriesEl = document.getElementById('galleries');
+  var summaryText = document.getElementById('summary-text');
+  var form = document.getElementById('card-order-form');
+  var orderError = document.getElementById('order-error');
+
+  var verifiedHash = null;
+  var selectedPhotos = []; // {galleryTitle, src, alt}
+
+  function sha256Hex(text) {
+    var data = new TextEncoder().encode(text.trim().toLowerCase());
+    return crypto.subtle.digest('SHA-256', data).then(function (digest) {
+      return Array.from(new Uint8Array(digest))
+        .map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+    });
+  }
+
+  function resolveUrl(base, src) {
+    try { return new URL(src, base).href; } catch (e) { return src; }
+  }
+
+  function updateSummary() {
+    var packs = Math.max(1, parseInt(document.getElementById('packs').value, 10) || 1);
+    if (!selectedPhotos.length) {
+      summaryText.textContent = 'No photos selected yet.';
+      return;
+    }
+    var total = packs * CARD_PRICE;
+    summaryText.innerHTML = '<strong>' + selectedPhotos.length + '</strong> photo' +
+      (selectedPhotos.length === 1 ? '' : 's') + ' selected · ' +
+      packs + ' pack' + (packs === 1 ? '' : 's') + ' of 40 cards · ' +
+      'Total: <strong>$' + total + '</strong>';
+  }
+
+  function renderGalleries(galleries) {
+    galleriesEl.innerHTML = '';
+    var chain = Promise.resolve();
+    galleries.forEach(function (g) {
+      chain = chain.then(function () {
+        return fetch(g.url.replace(/\/$/, '') + '/photos.json', { cache: 'no-store' })
+          .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+          .catch(function () { return null; })
+          .then(function (manifest) {
+            if (!manifest || !manifest.photos || !manifest.photos.length) return;
+            var section = document.createElement('section');
+            section.className = 'gallery-section';
+            var h = document.createElement('h3');
+            h.textContent = g.title || 'Session photos';
+            section.appendChild(h);
+            var meta = document.createElement('p');
+            meta.className = 'meta';
+            var bits = [];
+            if (g.session_type) bits.push(g.session_type);
+            if (g.session_date) bits.push(g.session_date);
+            meta.textContent = bits.join(' · ');
+            section.appendChild(meta);
+            var grid = document.createElement('div');
+            grid.className = 'photo-grid';
+            grid.setAttribute('role', 'group');
+            grid.setAttribute('aria-label', 'Photos from ' + (g.title || 'this session'));
+            manifest.photos.forEach(function (p, i) {
+              var abs = resolveUrl(g.url, p.src);
+              var card = document.createElement('label');
+              card.className = 'photo-pick';
+              var box = document.createElement('input');
+              box.type = 'checkbox';
+              box.setAttribute('aria-label', 'Use this photo on my cards: ' + (p.alt || ('photo ' + (i + 1))));
+              var img = document.createElement('img');
+              img.src = abs; img.alt = p.alt || '';
+              img.loading = 'lazy';
+              var cap = document.createElement('span');
+              cap.className = 'pick-label';
+              cap.appendChild(box);
+              var t = document.createElement('span');
+              t.textContent = p.alt || ('Photo ' + (i + 1));
+              cap.appendChild(t);
+              card.appendChild(img);
+              card.appendChild(cap);
+              box.addEventListener('change', function () {
+                card.classList.toggle('selected', box.checked);
+                var entry = { galleryTitle: g.title || 'Session', src: abs, alt: p.alt || '' };
+                if (box.checked) {
+                  selectedPhotos.push(entry);
+                } else {
+                  selectedPhotos = selectedPhotos.filter(function (s) { return s.src !== abs; });
+                }
+                updateSummary();
+              });
+              grid.appendChild(card);
+            });
+            section.appendChild(grid);
+            galleriesEl.appendChild(section);
+          });
+      });
+    });
+    return chain.then(function () {
+      if (!galleriesEl.children.length) {
+        galleriesEl.innerHTML = '<p>No photos found yet. Mary is still linking your galleries — check back soon, or text her at (803) 630-7835.</p>';
+      }
+    });
+  }
+
+  gateBtn.addEventListener('click', function () {
+    var email = gateInput.value.trim();
+    gateError.textContent = '';
+    if (!email || email.indexOf('@') < 0) {
+      gateError.textContent = 'Please enter a valid email address.';
+      gateInput.focus();
+      return;
+    }
+    gateBtn.disabled = true;
+    gateBtn.textContent = 'Finding your photos…';
+    sha256Hex(email).then(function (hex) {
+      return fetch(SITE + '/client-galleries.json', { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .then(function (doc) {
+          var galleries = (doc.galleries && doc.galleries[hex]) || [];
+          return fetch(SITE + '/client-hashes.json', { cache: 'no-store' })
+            .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+            .then(function (hdoc) {
+              var ok = (hdoc.hashes || []).indexOf(hex) !== -1;
+              if (!ok) throw 'not-client';
+              return galleries;
+            });
+        })
+        .then(function (galleries) {
+          verifiedHash = hex;
+          try { sessionStorage.setItem('pp_verified_email', hex); } catch (e) {}
+          document.getElementById('ord-email').value = email;
+          gate.hidden = true;
+          studio.hidden = false;
+          document.getElementById('pick-heading').focus();
+          return renderGalleries(galleries);
+        })
+        .catch(function (err) {
+          if (err === 'not-client') {
+            gateError.textContent = 'We couldn\u2019t find a booking with that email address. ' +
+              'Holiday cards are only for clients with a booked session. ' +
+              'If you think this is a mistake, contact Mary at purephotography6@gmail.com or text (803) 630-7835.';
+            gateInput.select();
+          } else {
+            gateError.textContent = 'We couldn\u2019t load your photos just now. Please check your connection and try again.';
+          }
+        })
+        .then(function () {
+          gateBtn.disabled = false;
+          gateBtn.textContent = 'Show my photos';
+        });
+    });
+  });
+  gateInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); gateBtn.click(); }
+  });
+
+  document.getElementById('packs').addEventListener('input', updateSummary);
+
+  form.addEventListener('submit', function (e) {
+    var ok = false;
+    try { ok = !!sessionStorage.getItem('pp_verified_email'); } catch (err) {}
+    if (!ok || !verifiedHash) {
+      e.preventDefault();
+      orderError.textContent = 'Please verify your booking email at the top of the page before ordering.';
+      gate.hidden = false; studio.hidden = true;
+      gate.scrollIntoView();
+      gateInput.focus();
+      return;
+    }
+    if (!selectedPhotos.length) {
+      e.preventDefault();
+      orderError.textContent = 'Please pick at least one photo for your cards.';
+      document.getElementById('pick-heading').scrollIntoView();
+      return;
+    }
+    e.preventDefault();
+    var packs = Math.max(1, parseInt(document.getElementById('packs').value, 10) || 1);
+    var lines = [
+      'Holiday card order (CLIENT-VERIFIED)',
+      '',
+      'Name: ' + document.getElementById('ord-name').value,
+      'Email: ' + document.getElementById('ord-email').value,
+      'Phone: ' + document.getElementById('ord-phone').value,
+      'Shipping address: ' + document.getElementById('ord-address').value,
+      'Delivery instructions: ' + (document.getElementById('ord-notes').value || 'None'),
+      '',
+      'Packs (40 cards each): ' + packs,
+      'Price per pack: $' + CARD_PRICE,
+      'TOTAL: $' + (packs * CARD_PRICE),
+      '',
+      'Photos chosen (' + selectedPhotos.length + '):'
+    ];
+    selectedPhotos.forEach(function (p, i) {
+      lines.push((i + 1) + '. [' + p.galleryTitle + '] ' + p.alt);
+      lines.push('   ' + p.src);
+    });
+    lines.push('', 'Please confirm this is a registered client before fulfilling.');
+    var subject = 'Holiday card order — ' + document.getElementById('ord-name').value;
+    window.location.href = 'mailto:purephotography6@gmail.com?subject=' +
+      encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
+    document.getElementById('order-done').textContent =
+      'Thanks! Your email app is opening with your card order — just hit send and Mary will take care of the rest.';
+  });
+
+  gateInput.focus();
+})();
+</script>
+</body>
+</html>
