@@ -43,7 +43,10 @@
         '20. Balance due: The $10 shoot fee is due on the day of the shoot and must be paid as soon as the session is over.',
         '21. Shoot location: The photographer does not operate a studio. Sessions take place in the client\u2019s home, outdoors at the client\u2019s home, or at another location chosen by the client. If the selected location requires a permit or permission, the client is responsible for securing it before the shoot date.',
         '22. Force majeure: Neither party is liable for failure to perform due to events beyond reasonable control, including natural disasters, severe weather, fire, illness, or other emergencies. If the photographer cannot perform for these reasons, any payments made will be returned.',
-        '23. Print and product use: Prints, photo books, and other physical products from Pure Photography \u2014 as well as the digital photographs \u2014 are for the client\u2019s personal enjoyment only. They may be given as gifts or displayed in the client\u2019s home. They may not be handed to any third party for commercial use, resale, or use in other merchandise.'
+        '23. Print and product use: Prints, photo books, and other physical products from Pure Photography \u2014 as well as the digital photographs \u2014 are for the client\u2019s personal enjoyment only. They may be given as gifts or displayed in the client\u2019s home. They may not be handed to any third party for commercial use, resale, or use in other merchandise.',
+        '24. Artistic style: The client has viewed the photographer\u2019s portfolio and trusts the photographer\u2019s true-to-color, no-editing artistic style. The photographer has sole discretion over creative choices including posing, composition, and image selection.',
+        '25. Governing law: This agreement is governed by the laws of South Carolina.',
+        '26. Severability: If any term of this agreement is found unenforceable, the remaining terms stay in full effect.'
     ];
     // Contract terms for the free-shoot booking page (no payment terms).
     const freeShootTerms = [
@@ -66,7 +69,10 @@
         '17. Weather: If weather conditions, such as rain, prevent an outdoor shoot from taking place, the client will receive a free reschedule.',
         '18. Shoot location: The photographer does not operate a studio. Sessions take place in the client\u2019s home, outdoors at the client\u2019s home, or at another location chosen by the client. If the selected location requires a permit or permission, the client is responsible for securing it before the shoot date.',
         '19. Force majeure: Neither party is liable for failure to perform due to events beyond reasonable control, including natural disasters, severe weather, fire, illness, or other emergencies.',
-        '20. Print and product use: Prints, photo books, and other physical products from Pure Photography \u2014 as well as the digital photographs \u2014 are for the client\u2019s personal enjoyment only. They may be given as gifts or displayed in the client\u2019s home. They may not be handed to any third party for commercial use, resale, or use in other merchandise.'
+        '20. Print and product use: Prints, photo books, and other physical products from Pure Photography \u2014 as well as the digital photographs \u2014 are for the client\u2019s personal enjoyment only. They may be given as gifts or displayed in the client\u2019s home. They may not be handed to any third party for commercial use, resale, or use in other merchandise.',
+        '21. Artistic style: The client has viewed the photographer\u2019s portfolio and trusts the photographer\u2019s true-to-color, no-editing artistic style. The photographer has sole discretion over creative choices including posing, composition, and image selection.',
+        '22. Governing law: This agreement is governed by the laws of South Carolina.',
+        '23. Severability: If any term of this agreement is found unenforceable, the remaining terms stay in full effect.'
     ];
         const bookingForm = document.querySelector('#booking-form');
     if (bookingForm) {
