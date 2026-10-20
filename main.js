@@ -86,7 +86,9 @@
     const printAddons = [
       { input: document.querySelector('#qty-5x7'), line: document.querySelector('#line-5x7'), label: document.querySelector('#label-5x7'), amount: document.querySelector('#amount-5x7'), name: '5 × 7 print', price: 20 },
       { input: document.querySelector('#qty-8x10'), line: document.querySelector('#line-8x10'), label: document.querySelector('#label-8x10'), amount: document.querySelector('#amount-8x10'), name: '8 × 10 print', price: 30 },
-      { input: document.querySelector('#qty-11x14'), line: document.querySelector('#line-11x14'), label: document.querySelector('#label-11x14'), amount: document.querySelector('#amount-11x14'), name: '11 × 14 print', price: 50 }
+      { input: document.querySelector('#qty-11x14'), line: document.querySelector('#line-11x14'), label: document.querySelector('#label-11x14'), amount: document.querySelector('#amount-11x14'), name: '11 × 14 print', price: 50 },
+      { input: document.querySelector('#qty-ornament'), line: document.querySelector('#line-ornament'), label: document.querySelector('#label-ornament'), amount: document.querySelector('#amount-ornament'), name: 'Photo ornament', price: 25 },
+      { input: document.querySelector('#qty-ornament3'), line: document.querySelector('#line-ornament3'), label: document.querySelector('#label-ornament3'), amount: document.querySelector('#amount-ornament3'), name: 'Photo ornament 3-pack', price: 60 }
     ];
     // Free-shoot gate: Mary texts/DMs this code to free-shoot clients.
     // To change it, just tell Hannah the new code.

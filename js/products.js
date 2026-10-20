@@ -28,12 +28,20 @@
     // Holiday / Christmas cards — pack of 40 from the client's photo(s).
     // The client picks the photo(s) from ANY of their previous sessions
     // via the card builder (card-builder.html).
+    // LIMITED TIME: available until December 26, 2026 (Mary 2026-10-20).
     holidayCards: {
       id: 'holiday-cards',
       label: 'Holiday cards',
       detail: 'Pack of 40 cards made from your photos — you pick the photo(s)',
       price: 45,
-      unit: 'per pack of 40'
-    }
+      unit: 'per pack of 40',
+      limitedTime: 'Available until December 26, 2026'
+    },
+    // Ceramic photo ornaments — LIMITED TIME until December 26, 2026
+    // (Mary 2026-10-20: pricing confirmed, add to print store).
+    ornaments: [
+      { id: 'ornament-single', label: 'Photo ornament', detail: 'Ceramic ornament with your photo', price: 25, unit: 'each', limitedTime: 'Available until December 26, 2026' },
+      { id: 'ornament-3pack', label: 'Photo ornament 3-pack', detail: 'Three ceramic ornaments with your photos', price: 60, unit: 'per 3-pack', limitedTime: 'Available until December 26, 2026' }
+    ]
   };
 })(window);

@@ -79,6 +79,7 @@
       <li><a href="services.html">Services &amp; pricing</a></li>
       <li><a href="booking.html">Book a shoot</a></li>
       <li><a href="contract.html">Contract</a></li>
+      <li><a href="waiver.html">Waiver</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="baptism-guide.html">Baptism Guide</a></li>
     </ul>
@@ -87,6 +88,44 @@
 <div class="motto-banner">
       <h1 id="hero-title">Pure Photography — true to color</h1>
     </div>
+<section aria-labelledby="before-you-book-title">
+      <div class="section-head"><h2 id="before-you-book-title">Things you need to know before you book</h2><p>A few important details so your session goes smoothly.</p></div>
+      <div class="services">
+        <article class="service"><span class="num">01</span><h3>Sessions take place in York, SC</h3><p>Clients come to me — I serve York, Rock Hill, Clover, and the South Carolina side of Lake Wylie. I don't travel to clients.</p></article>
+        <article class="service"><span class="num">02</span><h3>$20 booking fee holds your date</h3><p>The $20 booking fee is due within 24 hours of requesting your date. If it's not received in time, the booking is canceled and the date is released.</p></article>
+        <article class="service"><span class="num">03</span><h3>All payments are nonrefundable</h3><p>Every payment — booking fee, shoot fee, and print orders — is nonrefundable. Please be sure before you book.</p></article>
+        <article class="service"><span class="num">04</span><h3>Turnaround varies</h3><p>My schedule is very full and can change, so I can't promise an exact delivery date. I appreciate your flexibility — you will receive your finished photographs.</p></article>
+        <article class="service"><span class="num">05</span><h3>True to color, no editing</h3><p>I don't edit my photos. What you see is honest, natural color — the moment exactly as it was.</p></article>
+        <article class="service"><span class="num">06</span><h3>Newborn &amp; infant sessions need a signed waiver</h3><p>Because I'm not CPR certified, a signed <a href="waiver.html">safety waiver</a> is required, and a parent or guardian must stay within arm's reach of the baby at all times.</p></article>
+      </div>
+    </section>
+<section aria-labelledby="pricing-guide-title">
+      <div class="section-head"><h2 id="pricing-guide-title">Pricing guide</h2><p>Simple, honest pricing — no surprises.</p></div>
+      <div class="services">
+        <article class="service"><span class="num">$</span><h3>Regular shoot</h3><p><strong><span id="guide-shoot-fee">$10</span> shoot fee + $20 booking fee = <span id="guide-shoot-total">$30 total</span>.</strong> <span id="guide-price-note">Current pricing through December 31, 2026.</span></p></article>
+        <article class="service"><span class="num">$</span><h3>Special sessions</h3><p><strong>Angel Shoots (baptism) $120 · Birthday parties $220 · Engagement $120.</strong> Each includes the $20 booking fee in the total.</p></article>
+        <article class="service"><span class="num">$</span><h3>Prints</h3><p><strong>5 × 7 — $20 · 8 × 10 — $30 · 11 × 14 — $50.</strong> Prints are for session clients only.</p></article>
+        <article class="service"><span class="num">★</span><h3>Limited-time holiday products</h3><p><strong>Photo ornaments $25 each (3-pack $60) · Holiday cards $45 per pack of 40.</strong> Available until <strong>December 26</strong> only.</p></article>
+      </div>
+      <p class="fine" style="text-align:center">Full details on the <a href="services.html">Services &amp; pricing</a> page.</p>
+    </section>
+    <script>
+    /* Pricing guide auto-update: when the shoot fee goes up on Jan 1, 2027,
+       the guide updates itself — no manual edit needed. */
+    (function () {
+      'use strict';
+      try {
+        if (new Date() >= new Date('2027-01-01T00:00:00-05:00')) {
+          var fee = document.getElementById('guide-shoot-fee');
+          var total = document.getElementById('guide-shoot-total');
+          var note = document.getElementById('guide-price-note');
+          if (fee) fee.textContent = '$50';
+          if (total) total.textContent = '$70 total';
+          if (note) note.textContent = 'Pricing effective January 1, 2027.';
+        }
+      } catch (e) {}
+    })();
+    </script>
 <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
         <p class="eyebrow">Portraits · couples · families</p>
@@ -117,7 +156,7 @@
 
     <section class="page-hub" aria-labelledby="hub-title">
       <div class="section-head"><h2 id="hub-title">Explore the site</h2><p>Every part of Pure Photography has its own page — jump right in.</p></div>
-      <div class="hub-grid"><a href="portfolio.html">Portfolio</a><a href="slideshows.html">Slideshows</a><a href="behind-scenes.html">Behind the scenes</a><a href="about.html">About</a><a href="services.html">Services & pricing</a><a href="booking.html">Book a shoot</a><a href="contract.html">Contract</a><a href="contact.html">Contact</a><a href="baptism-guide.html">Baptism Guide</a></div>
+      <div class="hub-grid"><a href="portfolio.html">Portfolio</a><a href="slideshows.html">Slideshows</a><a href="behind-scenes.html">Behind the scenes</a><a href="about.html">About</a><a href="services.html">Services & pricing</a><a href="booking.html">Book a shoot</a><a href="contract.html">Contract</a><a href="waiver.html">Waiver</a><a href="contact.html">Contact</a><a href="baptism-guide.html">Baptism Guide</a></div>
     </section>
     <section class="mailing" aria-labelledby="mailing-title">
       <div class="mailing-inner">
