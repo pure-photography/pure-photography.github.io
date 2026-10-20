@@ -90,6 +90,16 @@
       { input: document.querySelector('#qty-ornament'), line: document.querySelector('#line-ornament'), label: document.querySelector('#label-ornament'), amount: document.querySelector('#amount-ornament'), name: 'Photo ornament', price: 25 },
       { input: document.querySelector('#qty-ornament3'), line: document.querySelector('#line-ornament3'), label: document.querySelector('#label-ornament3'), amount: document.querySelector('#amount-ornament3'), name: 'Photo ornament 3-pack', price: 60 }
     ];
+    // Holiday products auto-takedown (Mary 2026-10-20): ornaments, holiday
+    // cards and all holiday items show Oct 1 – Dec 26 each year, and are
+    // hidden automatically from Dec 27 until next Oct 1.
+    try {
+      var _now = new Date(), _m = _now.getMonth(), _d = _now.getDate();
+      var _holidayActive = (_m === 9) || (_m === 10) || (_m === 11 && _d <= 26);
+      if (!_holidayActive) {
+        document.querySelectorAll('.holiday-product').forEach(function (el) { el.style.display = 'none'; });
+      }
+    } catch (e) {}
     // Free-shoot gate: Mary texts/DMs this code to free-shoot clients.
     // To change it, just tell Hannah the new code.
     const FREE_SHOOT_CODE = 'maryfree';

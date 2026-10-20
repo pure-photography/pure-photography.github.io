@@ -44,4 +44,14 @@
       { id: 'ornament-3pack', label: 'Photo ornament 3-pack', detail: 'Three ceramic ornaments with your photos', price: 60, unit: 'per 3-pack', limitedTime: 'Available until December 26, 2026' }
     ]
   };
+
+  // Holiday products (ornaments, holiday cards) are seasonal: visible
+  // Oct 1 – Dec 26 each year, hidden Dec 27 – Sep 30 (Mary 2026-10-20).
+  // Galleries should call this before rendering holiday items.
+  global.PurePhotoProducts.holidayActive = function () {
+    try {
+      var now = new Date(), m = now.getMonth(), d = now.getDate();
+      return (m === 9) || (m === 10) || (m === 11 && d <= 26);
+    } catch (e) { return true; }
+  };
 })(window);
