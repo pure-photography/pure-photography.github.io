@@ -14,6 +14,10 @@
   // same date annually, so the year part is computed, not hard-coded
   // (Mary 2026-10-20: ornaments/cards return each Oct 1 – Dec 26).
   var DEC26 = 'Available until December 26, ' + new Date().getFullYear();
+  // POD holiday guidance: standard shipping needs ~2 weeks in December —
+  // standard US orders must be placed by ~Dec 10 to land by Christmas
+  // (Printify 2025 holiday dates; 2026 confirmed mid-October).
+  var ORDERBY = 'Order by December 10 for Christmas delivery.';
 
   global.PurePhotoProducts = {
     // Individual photo prints — priced per photo, per size.
@@ -37,7 +41,7 @@
     holidayCards: {
       id: 'holiday-cards',
       label: 'Holiday cards',
-      detail: 'Pack of 40 cards made from your photos — you pick the photo(s)',
+      detail: 'Pack of 40 cards made from your photos — you pick the photo(s). ' + ORDERBY,
       price: 45,
       unit: 'per pack of 40',
       limitedTime: DEC26
@@ -45,8 +49,8 @@
     // Ceramic photo ornaments — LIMITED TIME until December 26 each year
     // (Mary 2026-10-20: pricing confirmed, add to print store).
     ornaments: [
-      { id: 'ornament-single', label: 'Photo ornament', detail: 'Ceramic ornament with your photo', price: 25, unit: 'each', limitedTime: DEC26 },
-      { id: 'ornament-3pack', label: 'Photo ornament 3-pack', detail: 'Three ceramic ornaments with your photos', price: 60, unit: 'per 3-pack', limitedTime: DEC26 }
+      { id: 'ornament-single', label: 'Photo ornament', detail: 'Ceramic ornament with your photo. ' + ORDERBY, price: 25, unit: 'each', limitedTime: DEC26 },
+      { id: 'ornament-3pack', label: 'Photo ornament 3-pack', detail: 'Three ceramic ornaments with your photos. ' + ORDERBY, price: 60, unit: 'per 3-pack', limitedTime: DEC26 }
     ]
   };
 
