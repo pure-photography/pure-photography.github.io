@@ -29,10 +29,10 @@
 
   var KB = [
     {k:["angel","baptism"], r:"Angel Shoots are Mary's baptism photography sessions — <strong>$120 total</strong>. She's there for the full church service plus the baptism ceremony. Would you like to book one? Just type <strong>book</strong> and I'll get your request ready."},
-    {k:["birthday"], r:"Birthday party photography is <strong>$220 total</strong> ($200 shoot + $20 retainer). Tell me about the celebration you have in mind — or type <strong>book</strong> to start a booking request."},
+    {k:["birthday"], r:"Birthday party photography is <strong>$220 total</strong> ($200 shoot + $20 booking fee). Tell me about the celebration you have in mind — or type <strong>book</strong> to start a booking request."},
     {k:["engagement","engaged","proposal"], r:"Engagement sessions are <strong>$120 total</strong>. Mary would love to capture your story! Type <strong>book</strong> and I'll help you get started."},
     {k:["pet","dog","cat","puppy","kitten"], r:"Mary photographs pets — <strong>dogs and cats only</strong> — at the regular $30 session rate. Pets need to work on or off leash, or be comfortable free in the home."},
-    {k:["price","pricing","cost","how much","fee","charge","rate"], r:"Portrait sessions are <strong>$30 total</strong> — a $10 shoot fee plus a $20 nonrefundable retainer due when you book. Special sessions: Angel Shoots (baptism) $120, birthday parties $220, engagements $120."},
+    {k:["price","pricing","cost","how much","fee","charge","rate"], r:"Portrait sessions are <strong>$30 total</strong> — a $10 shoot fee plus a $20 nonrefundable booking fee due when you book. Special sessions: Angel Shoots (baptism) $120, birthday parties $220, engagements $120."},
     {k:["service","offer","what do you","shoot","photograph"], r:"Mary offers portraits, couples and family sessions, senior portraits, pet portraits (dogs and cats only), Angel Shoots for baptisms ($120), birthday parties ($220), engagement sessions ($120), and prom photos. Which one are you interested in?"},
     {k:["where","location","travel","come to","york","address","area","based"], r:"Sessions take place in <strong>York, South Carolina — clients come to Mary</strong>. She serves York, Rock Hill, Clover, and Lake Wylie."},
     {k:["edit","photoshop","retouch","filter","true to color","true-to-color"], r:"True to color — Mary doesn't edit her photos. What you see is what you get: honest, natural color exactly as it was in the moment."},

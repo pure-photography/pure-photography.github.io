@@ -95,3 +95,8 @@ body.modal-open{overflow:hidden}
 .contract-modal-inner{padding:clamp(1.2rem,4vw,2.2rem);overflow-y:auto;-webkit-overflow-scrolling:touch}
 .contract-modal h2{font-family:'Libre Baskerville',serif;font-size:clamp(1.6rem,3.4vw,2.4rem);line-height:1.15;font-weight:400;margin:.2rem 0 1rem}
 .contract-modal .terms-list{margin:1.5rem 0}
+.contract-modal{position:relative}
+.contract-modal-close{position:absolute;top:.6rem;right:.6rem;width:2.9rem;height:2.9rem;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:1.6rem;line-height:1;cursor:pointer;z-index:2}
+.contract-modal-close:hover{background:var(--accent-soft)}
+.booking-confirmation{margin:1.5rem 0;padding:1.2rem 1.4rem;border-top:3px solid var(--accent);background:var(--surface)}
+.booking-confirmation h3{margin:0 0 .5rem;font-size:1.3rem}

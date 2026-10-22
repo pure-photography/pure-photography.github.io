@@ -24,7 +24,7 @@
         '1. Binding agreement: The photographer\'s signature on this agreement does not bind the contract \u2014 it simply shows that Mary Robinson is offering these terms and her photography services. This agreement becomes binding only when the client signs it.',
         '2. Booking fee: A $20 nonrefundable booking fee is due within 24 hours of requesting your shoot date to reserve it. If the booking fee is not received within 24 hours, the booking will be canceled and the date released.',
         '3. All payments are nonrefundable.',
-        '4. Current session price: The current shoot fee is $10 plus the $20 booking fee ($30 total). Effective 12:00 AM EST on December 31, 2026, the shoot fee goes up to $50 ($70 total with the $20 booking fee) \u2014 book now to lock in current pricing!',
+        '4. Current session price: The current shoot fee is $10 plus the $20 booking fee ($30 total). Current pricing through December 31, 2026; new pricing takes effect January 1, 2027 \u2014 book now to lock in current pricing!',
         '5. Photo protection guarantee and limit of liability: If photographs are lost because of SD card corruption or a camera malfunction, a free reshoot is guaranteed. The client understands that a session may not be possible to replicate, and if a reshoot cannot be done, the photographer\u2019s total liability is limited to a credit of the amount paid toward a future session. No cash refunds will be issued. Cameras, memory cards, and hard drives can fail without warning, and the photographer is not liable for data loss beyond this limit.',
         '6. Turnaround time varies. The client agrees to be flexible, and finished photos will be delivered.',
         '7. Gallery delivery may be by email or text. For email delivery, the client confirms the email address is valid and working. Photos are kept for 30 days and deleted if not successfully delivered within that time.',
@@ -51,7 +51,7 @@
     // Contract terms for the free-shoot booking page (no payment terms).
     const freeShootTerms = [
         '1. Binding agreement: The photographer\'s signature on this agreement does not bind the contract \u2014 it simply shows that Mary Robinson is offering these terms and her photography services. This agreement becomes binding only when the client signs it.',
-        '2. Free shoot: This session is completely free. There is no shoot fee and no retainer \u2014 nothing is due at booking or on the day of the shoot.',
+        '2. Free shoot: This session is completely free. There is no shoot fee and no booking fee \u2014 nothing is due at booking or on the day of the shoot.',
         '3. Photo protection guarantee and limit of liability: If photographs are lost because of SD card corruption or a camera malfunction, a free reshoot is guaranteed. The client understands that a session may not be possible to replicate. Cameras, memory cards, and hard drives can fail without warning.',
         '4. Turnaround time varies. The client agrees to be flexible, and finished photos will be delivered.',
         '5. Gallery delivery may be by email or text. For email delivery, the client confirms the email address is valid and working. Photos are kept for 30 days and deleted if not successfully delivered within that time.',
@@ -76,111 +76,57 @@
     ];
         const bookingForm = document.querySelector('#booking-form');
     if (bookingForm) {
+    const isFreeShoot = bookingForm.hasAttribute('data-free-shoot');
     const shootType = document.querySelector('#type');
-    const shootPrice = 10;
     const phoneInput = document.querySelector('#phone');
-    const galleryEmailInput = document.querySelector('#gallery-email');
-    const emailAgreement = document.querySelector('#email-valid-agreement');
     const deliveryEmail = document.querySelector('#gallery-by-email');
     const deliveryText = document.querySelector('#gallery-by-text');
-    const printAddons = [
-      { input: document.querySelector('#qty-5x7'), line: document.querySelector('#line-5x7'), label: document.querySelector('#label-5x7'), amount: document.querySelector('#amount-5x7'), name: '5 × 7 print', price: 20 },
-      { input: document.querySelector('#qty-8x10'), line: document.querySelector('#line-8x10'), label: document.querySelector('#label-8x10'), amount: document.querySelector('#amount-8x10'), name: '8 × 10 print', price: 30 },
-      { input: document.querySelector('#qty-11x14'), line: document.querySelector('#line-11x14'), label: document.querySelector('#label-11x14'), amount: document.querySelector('#amount-11x14'), name: '11 × 14 print', price: 50 },
-      { input: document.querySelector('#qty-ornament'), line: document.querySelector('#line-ornament'), label: document.querySelector('#label-ornament'), amount: document.querySelector('#amount-ornament'), name: 'Photo ornament', price: 25 },
-      { input: document.querySelector('#qty-ornament3'), line: document.querySelector('#line-ornament3'), label: document.querySelector('#label-ornament3'), amount: document.querySelector('#amount-ornament3'), name: 'Photo ornament 3-pack', price: 60 }
-    ];
-    // Holiday products auto-takedown (Mary 2026-10-20): ornaments, holiday
-    // cards and all holiday items show Oct 1 – Dec 26 each year, and are
-    // hidden automatically from Dec 27 until next Oct 1.
-    try {
-      var _now = new Date(), _m = _now.getMonth(), _d = _now.getDate();
-      var _holidayActive = (_m === 9) || (_m === 10) || (_m === 11 && _d <= 26);
-      if (!_holidayActive) {
-        document.querySelectorAll('.holiday-product').forEach(function (el) { el.style.display = 'none'; });
-      }
-    } catch (e) {}
+    const dateInput = document.querySelector('#date');
+    const waiverField = document.querySelector('#waiver-field');
+    const waiverAgree = document.querySelector('#waiver-agree');
     // Free-shoot gate: Mary texts/DMs this code to free-shoot clients.
     // To change it, just tell Hannah the new code.
     const FREE_SHOOT_CODE = 'maryfree';
-    // Free-shoot booking page has no price calculator — skip all estimate logic there.
-    const hasCalculator = printAddons.every(item => item.input && item.line && item.label && item.amount);
-    const estimateSessionName = document.querySelector('#estimate-session-name');
-    const estimateSessionPrice = document.querySelector('#estimate-session-price');
-    const estimateTotal = document.querySelector('#estimate-total');
-    const copyTotal = document.querySelector('#copy-total');
-    const copyConfirmation = document.querySelector('#copy-confirmation');
 
-    function currentEstimate() {
-      if (!hasCalculator) {
-        return { sessionPrice: 0, retainer: 0, addons: [], printsTotal: 0, hasSessionPrice: true, total: 0, freeShoot: true };
+    // Preferred date can't be in the past (local date).
+    try {
+      if (dateInput) {
+        var _dd = new Date();
+        var _ddm = String(_dd.getMonth() + 1).padStart(2, '0');
+        var _ddy = String(_dd.getDate()).padStart(2, '0');
+        dateInput.min = _dd.getFullYear() + '-' + _ddm + '-' + _ddy;
       }
-      const sessionPrice = shootPrice;
-      const addons = printAddons.map(item => {
-        const quantity = Math.max(0, Math.floor(Number(item.input.value) || 0));
-        return { ...item, quantity, subtotal: quantity * item.price };
-      });
-      const printsTotal = addons.reduce((sum, item) => sum + item.subtotal, 0);
-      const hasSessionPrice = sessionPrice !== null && Number.isFinite(sessionPrice) && sessionPrice > 0;
-      const retainer = 20;
-      return { sessionPrice, retainer, addons, printsTotal, hasSessionPrice, total: hasSessionPrice ? sessionPrice + retainer + printsTotal : null };
-    }
-
-    function updateEstimate() {
-      const estimate = currentEstimate();
-      estimateSessionName.textContent = shootType.value ? shootType.value + ' shoot' : 'Shoot price';
-      estimateSessionPrice.textContent = estimate.hasSessionPrice ? dollars.format(estimate.sessionPrice) : 'Not entered';
-      estimate.addons.forEach(item => {
-        item.line.hidden = item.quantity === 0;
-        item.label.textContent = item.name + (item.quantity === 1 ? '' : 's') + ' × ' + item.quantity;
-        item.amount.textContent = dollars.format(item.subtotal);
-      });
-      estimateTotal.textContent = estimate.hasSessionPrice ? dollars.format(estimate.total) : '—';
-      copyTotal.disabled = !estimate.hasSessionPrice;
-      copyConfirmation.textContent = '';
-    }
-
-    [shootType, ...printAddons.map(item => item.input)].forEach(control => { if (control) control.addEventListener('input', updateEstimate); });
-    if (hasCalculator) updateEstimate();
-
-    if (copyTotal) copyTotal.addEventListener('click', () => {
-      const estimate = currentEstimate();
-      if (!estimate.hasSessionPrice) return;
-      const text = dollars.format(estimate.total);
-      const temporary = document.createElement('textarea');
-      temporary.value = text;
-      temporary.setAttribute('readonly', '');
-      temporary.setAttribute('aria-hidden', 'true');
-      temporary.style.position = 'fixed';
-      temporary.style.opacity = '0';
-      document.body.appendChild(temporary);
-      temporary.select();
-      const copied = document.execCommand('copy');
-      temporary.remove();
-      copyConfirmation.textContent = copied ? text + ' copied. You can paste it into PayPal’s payment field.' : 'The total could not be copied. Please select and copy ' + text + '.';
-    });
+    } catch (e) {}
 
     function updateGalleryDelivery() {
-      const emailSelected = deliveryEmail.checked;
       const textSelected = deliveryText.checked;
-      emailAgreement.disabled = !emailSelected;
-      emailAgreement.required = emailSelected;
-      if (!emailSelected) emailAgreement.checked = false;
-      galleryEmailInput.disabled = !emailSelected || !emailAgreement.checked;
-      galleryEmailInput.required = emailSelected;
       phoneInput.required = textSelected;
     }
 
-    [deliveryEmail, deliveryText, emailAgreement].forEach(control => control.addEventListener('change', updateGalleryDelivery));
+    [deliveryEmail, deliveryText].forEach(control => control.addEventListener('change', updateGalleryDelivery));
     updateGalleryDelivery();
+
+    // Newborn/infant waiver: only shown when that shoot type is chosen.
+    function updateWaiverVisibility() {
+      if (!waiverField || !waiverAgree) return;
+      const isNewborn = shootType.value === 'Newborn / Infant';
+      waiverField.hidden = !isNewborn;
+      waiverAgree.required = isNewborn;
+      if (!isNewborn) waiverAgree.checked = false;
+    }
+    if (shootType) {
+      shootType.addEventListener('change', updateWaiverVisibility);
+      updateWaiverVisibility();
+    }
+
+    let pendingBooking = null;
 
     bookingForm.addEventListener('submit', (event) => {
       event.preventDefault();
       const f = event.currentTarget;
       if (!f.reportValidity()) return;
-      const estimate = currentEstimate();
       // Free-shoot gate: code must match what Mary sent by text/DM.
-      if (estimate.freeShoot) {
+      if (isFreeShoot) {
         const codeInput = document.querySelector('#free-shoot-code');
         const codeStatus = document.querySelector('#free-shoot-code-status');
         const entered = (codeInput && codeInput.value || '').trim().toLowerCase();
@@ -191,39 +137,27 @@
         }
         if (codeStatus) codeStatus.textContent = '';
       }
-      const selectedAddons = estimate.addons.filter(item => item.quantity > 0);
-      const itemizedLines = estimate.freeShoot
-        ? [
-            'Shoot: ' + f.elements.type.value + ' — FREE',
-            'Booking retainer — $0.00 (free shoot, nothing due)',
-            'Total: $0.00'
-          ]
-        : [
-            'Shoot: ' + f.elements.type.value + ' — ' + (estimate.hasSessionPrice ? dollars.format(estimate.sessionPrice) : 'Price to be confirmed'),
-            'Booking retainer — ' + dollars.format(estimate.retainer),
-            ...selectedAddons.map(item => item.name + (item.quantity === 1 ? '' : 's') + ' × ' + item.quantity + ' — ' + dollars.format(item.subtotal))
-          ];
-      if (!estimate.freeShoot && !selectedAddons.length) itemizedLines.push('Print add-ons: None');
-      if (!estimate.freeShoot) itemizedLines.push('Total: ' + (estimate.hasSessionPrice ? dollars.format(estimate.total) : 'To be confirmed'));
-      const galleryDelivery = deliveryEmail.checked ? 'Email to ' + galleryEmailInput.value : 'Text to ' + phoneInput.value;
-      const subject = encodeURIComponent((estimate.freeShoot ? 'FREE shoot request from ' : 'Photo shoot request from ') + f.elements.name.value);
-      const pricingNote = estimate.freeShoot
-        ? 'This is a FREE shoot — no shoot fee and no retainer. Nothing is due.\n\nDetails:\n'
-        : 'The current shoot fee is $10 plus the $20 retainer ($30 total). The shoot fee goes up to $50 on New Year\'s Eve at midnight ($70 total with the $20 retainer) — book now to lock in current pricing!\n\nDetails:\n';
-      const body = encodeURIComponent('Hello Pure Photography,\n\nI would like to request a photo shoot.\n\nName: ' + f.elements.name.value + '\nPhone: ' + (f.elements.phone.value || 'Not provided') + '\nPreferred date: ' + f.elements.date.value + '\nGallery delivery: ' + galleryDelivery + '\n\nItemized estimate:\n' + itemizedLines.join('\n') + '\n\n' + pricingNote + f.elements.message.value + '\n');
-      document.querySelector('#booking-status').textContent = 'Thanks for booking! Your email app is opening \u2014 please read and sign the contract below to finish.';
-      setTimeout(() => {
-        window.location.href = 'mailto:' + mailTo + '?subject=' + subject + '&body=' + body;
-      }, 250);
+      pendingBooking = {
+        name: f.elements.name.value.trim(),
+        email: f.elements.bookingEmail.value.trim(),
+        phone: (f.elements.phone.value || '').trim() || 'Not provided',
+        type: f.elements.type.value,
+        date: f.elements.date.value,
+        gallery: deliveryEmail.checked ? 'Email' : 'Text',
+        message: f.elements.message.value.trim(),
+        waiver: !!(waiverAgree && waiverAgree.checked)
+      };
+      document.querySelector('#booking-status').textContent = 'Thanks! One more step: please read and sign the client agreement. Your email app will then open with your booking request and signed agreement together.';
       openContractModal();
     });
 
-    // ---- Blocking contract modal (booking flow) ----
-    // No close button, ESC is swallowed, backdrop clicks do nothing:
-    // the client must read and sign before continuing.
+    // ---- Contract modal (booking flow) ----
+    // Dismissible: the client can close it, but the date isn't held
+    // until the signed agreement is sent.
     const contractModalBackdrop = document.querySelector('#contract-modal-backdrop');
     const contractModal = document.querySelector('#contract-modal');
     const contractModalForm = document.querySelector('#contract-modal-form');
+    const contractModalClose = document.querySelector('#contract-modal-close');
     let contractModalOpener = null;
 
     function openContractModal() {
@@ -239,21 +173,28 @@
       if (modalTitle) modalTitle.focus({ preventScroll: true });
     }
 
-    function closeContractModal() {
+    function closeContractModal(signed) {
       if (!contractModalBackdrop || contractModalBackdrop.hidden) return;
       contractModalBackdrop.hidden = true;
       document.querySelectorAll('body > nav, body > main, body > footer').forEach(el => el.removeAttribute('inert'));
       document.body.classList.remove('modal-open');
-      document.querySelector('#booking-status').textContent = 'All set! Your booking request and signed contract are on their way \u2014 Mary will be in touch soon.';
+      document.querySelector('#booking-status').textContent = signed
+        ? 'All set! Your booking request and signed agreement are on their way \u2014 Mary will be in touch soon.'
+        : 'Your date isn\u2019t held until the signed agreement is sent.';
       if (contractModalOpener && contractModalOpener.focus) contractModalOpener.focus({ preventScroll: true });
     }
 
+    if (contractModalClose) {
+      contractModalClose.addEventListener('click', () => closeContractModal(false));
+    }
+
     if (contractModal) {
-      // Trap focus inside the modal and swallow Escape (it must stay open until signed).
+      // Trap focus inside the modal; Escape closes it (the date isn't held until signed).
       contractModal.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
           event.preventDefault();
           event.stopPropagation();
+          closeContractModal(false);
           return;
         }
         if (event.key !== 'Tab') return;
@@ -293,15 +234,46 @@
         const signer = contractModalForm.elements.agreementName.value.trim();
         const signedDate = contractModalForm.elements.agreementDate.value;
         const timestamp = new Date().toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'long' });
-        const subject = encodeURIComponent('Signed client agreement: ' + signer);
-        const activeTerms = (typeof hasCalculator !== 'undefined' && !hasCalculator) ? freeShootTerms : contractTerms;
+        const activeTerms = isFreeShoot ? freeShootTerms : contractTerms;
         const btsSelf = contractModalForm.elements.btsSelf && contractModalForm.elements.btsSelf.checked ? 'Yes' : 'No';
         const btsChild = contractModalForm.elements.btsChild && contractModalForm.elements.btsChild.checked ? 'Yes' : 'No';
         const btsLine = '\nBehind-the-scenes video opt-in: self=' + btsSelf + ', child=' + btsChild + '.\n';
-        const body = encodeURIComponent('Hello Pure Photography,\n\nI have read and agree to the following terms:\n\n' + activeTerms.join('\n\n') + '\n\nPhotographer signature: Mary Robinson\n\nBy signing below, the client agrees to all terms in this contract.' + btsLine + 'Client typed full name: ' + signer + '\nDate: ' + signedDate + '\nTimestamp: ' + timestamp + '\n');
-        modalStatus.textContent = 'Opening your email app with the signed agreement. Review it, then send it to Pure Photography.';
+        const b = pendingBooking || {};
+        const itemizedLines = isFreeShoot
+          ? [
+              'Shoot: ' + (b.type || '') + ' \u2014 FREE',
+              'Booking fee \u2014 $0.00 (free shoot, nothing due)',
+              'Total: $0.00'
+            ]
+          : [
+              'Shoot: ' + (b.type || '') + ' \u2014 $10.00',
+              'Booking fee \u2014 $20.00',
+              'Total: $30.00'
+            ];
+        const pricingNote = isFreeShoot
+          ? 'This is a FREE shoot \u2014 no shoot fee and no booking fee. Nothing is due.\n\n'
+          : 'The current shoot fee is $10 plus the $20 booking fee ($30 total). Current pricing through December 31, 2026; new pricing takes effect January 1, 2027 \u2014 book now to lock in current pricing!\n\n';
+        const subject = encodeURIComponent((isFreeShoot ? 'FREE shoot request from ' : 'Photo shoot request from ') + (b.name || signer) + ' \u2014 signed client agreement');
+        const body = encodeURIComponent(
+          'Hello Pure Photography,\n\nI would like to request a photo shoot.\n\n' +
+          'Name: ' + (b.name || '') + '\nEmail: ' + (b.email || '') + '\nPhone: ' + (b.phone || '') + '\nPreferred date: ' + (b.date || '') + '\nShoot type: ' + (b.type || '') + '\nGallery delivery: ' + (b.gallery || '') +
+          (b.waiver ? '\nNewborn/infant safety waiver: agreed (see waiver.html)' : '') +
+          '\n\nItemized estimate:\n' + itemizedLines.join('\n') + '\n\n' + pricingNote +
+          (b.message ? 'What the client is imagining:\n' + b.message + '\n\n' : '') +
+          '--- Signed client agreement ---\n\nI have read and agree to the following terms:\n\n' + activeTerms.join('\n\n') +
+          '\n\nPhotographer signature: Mary Robinson\n\nBy signing below, the client agrees to all terms in this contract.' + btsLine +
+          'Client typed full name: ' + signer + '\nDate: ' + signedDate + '\nTimestamp: ' + timestamp + '\n'
+        );
+        modalStatus.textContent = 'Opening your email app with your booking request and signed agreement. Review them, then send the email to Pure Photography.';
         window.location.href = 'mailto:' + mailTo + '?subject=' + subject + '&body=' + body;
-        setTimeout(closeContractModal, 1500);
+        setTimeout(function () {
+          closeContractModal(true);
+          var confirmation = document.querySelector('#booking-confirmation');
+          if (confirmation && !isFreeShoot) {
+            confirmation.hidden = false;
+            confirmation.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 1500);
       });
     }
 
