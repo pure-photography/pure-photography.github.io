@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://pure-photography.github.io/portfolio.html</loc>
+    <image:image>
+      <image:loc>https://pure-photography.github.io/img/baby-dedication-grid-2026-10-27.jpg</image:loc>
+      <image:title>Kieran's baby dedication, October 25, 2026, Hillcrest Baptist Church, York, SC</image:title>
+      <image:caption>Grid of photos from Kieran's baby dedication on Sunday, October 25, 2026, at Hillcrest Baptist Church in York, SC, by Pure Photography.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://pure-photography.github.io/img/mary-headshot.jpg</image:loc>
+      <image:title>Pure Photography photographer headshot</image:title>
+      <image:caption>Headshot of the photographer behind Pure Photography, York, SC.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://pure-photography.github.io/img/lauren-01.jpg</image:loc>
+      <image:title>Pure Photography family photos</image:title>
+      <image:caption>Family photos by Pure Photography, York, SC.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://pure-photography.github.io/img/lauren-02.jpg</image:loc>
+      <image:title>Pure Photography family photos</image:title>
+      <image:caption>Family photos by Pure Photography, York, SC.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://pure-photography.github.io/img/lauren-03.jpg</image:loc>
+      <image:title>Pure Photography family photos</image:title>
+      <image:caption>Family photos by Pure Photography, York, SC.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://pure-photography.github.io/img/lauren-04.jpg</image:loc>
+      <image:title>Pure Photography family photos</image:title>
+      <image:caption>Family photos by Pure Photography, York, SC.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://pure-photography.github.io/img/lauren-05.jpg</image:loc>
+      <image:title>Pure Photography family photos</image:title>
+      <image:caption>Family photos by Pure Photography, York, SC.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pure-photography.github.io/index.html</loc>
+    <image:image>
+      <image:loc>https://pure-photography.github.io/img/mary-headshot.jpg</image:loc>
+      <image:title>Pure Photography photographer headshot</image:title>
+      <image:caption>Headshot of the photographer behind Pure Photography, York, SC.</image:caption>
+    </image:image>
+  </url>
+</urlset>
