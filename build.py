@@ -14,13 +14,13 @@ PAGES = {
     'index': {
         'file': 'index.html',
         'title': 'Pure Photography | Portrait Photographer in York, SC',
-        'desc': 'Warm, affordable photography in York, South Carolina, serving families, portraits, seniors, baptisms, and events across Rock Hill, Clover, and Lake Wylie.',
+        'desc': 'Warm, affordable photography in York, South Carolina. As an affordable photographer in York, SC, I serve families, portraits, seniors, baptisms, and events across Rock Hill, Clover, and Lake Wylie.',
         'nav': 'Home',
     },
     'portfolio': {
         'file': 'portfolio.html',
-        'title': 'Family & Baptism Photographer York County | Portfolio',
-        'desc': 'View family, portrait, graduation, couples, and baptism photography by Pure Photography, serving York County and nearby South Carolina communities.',
+        'title': 'Family, Baby Dedication & Baptism Photographer in York, SC | Portfolio',
+        'desc': 'View family, portrait, graduation, couples, baby dedication, and baptism photography by Pure Photography, a family photographer in York, SC, serving York County and nearby South Carolina communities.',
         'nav': 'Portfolio',
     },
     'behind-scenes': {
@@ -37,14 +37,14 @@ PAGES = {
     },
     'services': {
         'file': 'services.html',
-        'title': 'Affordable Photographer South Carolina | Services & Pricing',
-        'desc': 'Affordable family, portrait, senior, pet, and event photography serving York, Rock Hill, Clover, and the South Carolina side of Lake Wylie.',
+        'title': 'Affordable Photographer in York, SC | Services & Pricing',
+        'desc': 'Affordable family, portrait, senior, pet, maternity, birthday party, engagement, and event photography in York, SC, serving Rock Hill, Clover, and the South Carolina side of Lake Wylie.',
         'nav': 'Services & pricing',
     },
     'booking': {
         'file': 'booking.html',
-        'title': 'Book a Family Photographer Rock Hill SC | Pure Photography',
-        'desc': 'Book a family, portrait, senior, pet, baptism, or event photographer serving Rock Hill, York, Clover, and Lake Wylie, South Carolina.',
+        'title': 'Book a Family Photographer in York, SC | Pure Photography',
+        'desc': 'Book a family, portrait, senior, pet, baptism, or event photographer in York, SC, serving Rock Hill, Clover, and Lake Wylie, South Carolina.',
         'nav': 'Book a shoot',
     },
     'contract': {
