@@ -255,3 +255,31 @@ html[data-theme="high-contrast"] .btn-no-red {
   margin: 1rem 0;
 }
 .auth-tabs .btn + .btn { margin-left: 0; }
+
+/* "Sign in with Google" button on the sign-in form. */
+.btn-google {
+  background: #fff;
+  border-color: #747775;
+  color: #1f1f1f;
+  width: 100%;
+}
+html[data-theme="high-contrast"] .btn-google {
+  background: #fff;
+  color: #000;
+}
+
+/* "or" divider between password sign-in and Google sign-in. */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  color: var(--ep-fg-muted);
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--ep-border);
+}
+.auth-divider span { font-weight: 700; }

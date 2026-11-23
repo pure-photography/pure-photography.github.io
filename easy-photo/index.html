@@ -59,14 +59,11 @@
       <p>Easy Photo is the free studio app for photographers: private client
       galleries, a CRM, a website builder, a print store, an email list, and
       booking — free forever, and built to work with a screen reader. Sign in
-      with your business email and password. Nothing else — no Google, Apple,
-      or social sign-in.</p>
+      with your email and password, or with Google.</p>
 
       <div class="auth-tabs" role="group" aria-label="Sign-in choices">
         <button type="button" id="tab-signin" class="btn btn-primary" aria-pressed="true">Sign in</button>
         <button type="button" id="tab-signup" class="btn" aria-pressed="false">Create account</button>
-        <button type="button" id="tab-agent" class="btn" aria-pressed="false">Agent sign-in</button>
-        <button type="button" id="tab-owner" class="btn" aria-pressed="false">Owner login (Mary only)</button>
       </div>
 
       <!-- Sign in -->
@@ -80,8 +77,14 @@
           <label for="si-password">Password <span class="required" aria-hidden="true">*</span></label>
           <input type="password" id="si-password" name="password" required autocomplete="current-password">
         </div>
+        <div class="field check-row">
+          <input type="checkbox" id="si-remember" name="remember" checked>
+          <label for="si-remember">Remember me</label>
+        </div>
         <p class="error" id="si-error" role="alert" hidden></p>
         <button type="submit" class="btn btn-primary">Sign in</button>
+        <div class="auth-divider" role="separator" aria-label="or"><span>or</span></div>
+        <button type="button" id="google-signin-btn" class="btn btn-google">Sign in with Google</button>
         <p><button type="button" id="forgot-link" class="btn">Forgot password?</button></p>
       </form>
 
@@ -108,76 +111,30 @@
         <button type="submit" class="btn btn-primary">Create account</button>
       </form>
 
-      <!-- Agent sign-in -->
-      <form id="form-agent" class="card" novalidate hidden>
-        <h2>Agent sign-in</h2>
-        <p>For AI assistants working for a photographer: sign in with the
-        photographer's business email and the agent key the photographer gave
-        you. The agent works only inside that photographer's account, and only
-        on that photographer's behalf. Any AI can use this — Muse, Grok,
-        ChatGPT, or another.</p>
-        <div class="field">
-          <label for="ag-email">Photographer's business email <span class="required" aria-hidden="true">*</span></label>
-          <input type="email" id="ag-email" name="email" required autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="ag-key">Agent key <span class="required" aria-hidden="true">*</span></label>
-          <input type="password" id="ag-key" name="key" required autocomplete="off"
-                 aria-describedby="ag-key-hint">
-          <p class="hint" id="ag-key-hint">The key starts with “epk_”. Your
-          photographer creates it in Settings under “Agent access”.</p>
-        </div>
-        <p class="error" id="ag-error" role="alert" hidden></p>
-        <button type="submit" class="btn btn-primary">Sign in as agent</button>
-      </form>
-
-      <!-- Owner login -->
-      <form id="form-owner" class="card" novalidate hidden>
-        <h2>Owner login — Mary only</h2>
-        <p>This signs Mary in with the full photographer experience — galleries,
-        CRM, everything — <strong>plus</strong> the connection to her photography
-        site, <a href="https://pure-photography.github.io">Pure Photography</a>.
-        The connection is off until Mary signs in here, and it turns off again
-        when she signs out. Mary, or Hannah acting for her, can sign in here.</p>
-        <p class="hint">Enter your photography account password (the one for
-        purephotography6@gmail.com). Easy Photo checks it only on this device
-        and never sends it anywhere. It does not sign you into your photography
-        website — Easy Photo has no server that could check it there.</p>
-        <div class="field">
-          <label for="ow-email">Email <span class="required" aria-hidden="true">*</span></label>
-          <input type="email" id="ow-email" name="email" required autocomplete="email" value="purephotography6@gmail.com">
-        </div>
-        <div class="field">
-          <label for="ow-password">Password <span class="required" aria-hidden="true">*</span></label>
-          <input type="password" id="ow-password" name="password" required autocomplete="current-password">
-        </div>
-        <p class="error" id="ow-error" role="alert" hidden></p>
-        <button type="submit" class="btn btn-primary">Sign in as owner</button>
-      </form>
-
       <!-- Forgot password: request -->
       <form id="form-forgot" class="card" novalidate hidden>
         <h2>Forgot your password?</h2>
         <p>Easy Photo cannot reset passwords by itself — there is no server.
-        Instead, this sends a reset request to Mary, and Hannah will reply to
-        you with a reset code. Enter the business email for your account.</p>
+        Instead, this sends a reset request to the Easy Photo team, and you
+        will be replied to with a reset code. Enter the business email for
+        your account.</p>
         <div class="field">
           <label for="fp-email">Business email <span class="required" aria-hidden="true">*</span></label>
           <input type="email" id="fp-email" name="email" required autocomplete="email">
         </div>
         <p class="error" id="fp-error" role="alert" hidden></p>
-        <button type="submit" class="btn btn-primary">Send reset request to Mary</button>
+        <button type="submit" class="btn btn-primary">Send reset request</button>
         <p id="fp-sent" hidden>Request ready — your email app should have opened
-        with the request addressed to Mary. Press send in your email app. Hannah
-        will reply to your email with a reset code, usually within a day.</p>
+        with the request addressed to the Easy Photo team. Press send in your email app. You
+        will be replied to with a reset code, usually within a day.</p>
         <p><button type="button" id="fp-have-code-btn" class="btn">I have a reset code</button></p>
       </form>
 
       <!-- Forgot password: enter OTP + new password -->
       <form id="form-reset" class="card" novalidate hidden>
         <h2>Reset your password</h2>
-        <p>Enter the reset code Hannah sent you, then choose a new password.
-        Easy Photo never generates codes itself — the code comes from Hannah.</p>
+        <p>Enter the reset code from the reply, then choose a new password.
+        Easy Photo never generates codes itself — the code comes from the reply.</p>
         <div class="field">
           <label for="rs-email">Business email <span class="required" aria-hidden="true">*</span></label>
           <input type="email" id="rs-email" name="email" required autocomplete="email">
@@ -186,7 +143,7 @@
           <label for="rs-code">Reset code <span class="required" aria-hidden="true">*</span></label>
           <input type="text" id="rs-code" name="code" required autocomplete="one-time-code" inputmode="numeric"
                  aria-describedby="rs-code-hint">
-          <p class="hint" id="rs-code-hint">The 6-digit code from Hannah's reply.</p>
+          <p class="hint" id="rs-code-hint">The 6-digit code from the reply.</p>
         </div>
         <div class="field">
           <label for="rs-password">New password <span class="required" aria-hidden="true">*</span></label>

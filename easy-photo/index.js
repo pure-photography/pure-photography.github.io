@@ -21,9 +21,7 @@
   /* ---------- auth view tabs ---------- */
   var tabs = {
     signin: { tab: 'tab-signin', form: 'form-signin' },
-    signup: { tab: 'tab-signup', form: 'form-signup' },
-    agent: { tab: 'tab-agent', form: 'form-agent' },
-    owner: { tab: 'tab-owner', form: 'form-owner' }
+    signup: { tab: 'tab-signup', form: 'form-signup' }
   };
 
   function showTab(key) {
@@ -58,16 +56,75 @@
   });
 
   /* ---------- sign in ---------- */
+  function rememberMe() {
+    var box = document.getElementById('si-remember');
+    return box ? box.checked : true;
+  }
+
   document.getElementById('form-signin').addEventListener('submit', function (e) {
     e.preventDefault();
     var email = document.getElementById('si-email').value;
     var password = document.getElementById('si-password').value;
-    EasyPhoto.auth.signIn(email, password).then(function () {
+    EasyPhoto.auth.signIn(email, password, rememberMe()).then(function () {
       enterApp();
     }).catch(function (err) {
       showError(document.getElementById('si-error'), err.message);
     });
   });
+
+  /* ---------- Sign in with Google (Google Identity Services) ----------
+   * Needs a Google Cloud OAuth client ID (EasyPhoto.auth.GOOGLE_CLIENT_ID).
+   * Until one is set, the button reports that Google sign-in is not set
+   * up yet. When it is set, the GIS script is loaded on first click and
+   * the Google account chooser opens. */
+  var gisReady = false;
+  var gisLoading = false;
+
+  function handleGoogleCredential(response) {
+    EasyPhoto.auth.signInWithGoogle(response.credential, rememberMe()).then(function () {
+      announce('Signed in with Google. Welcome to Easy Photo!');
+      enterApp();
+    }).catch(function (err) {
+      showError(document.getElementById('si-error'), err.message);
+    });
+  }
+
+  function startGoogleSignIn() {
+    var clientId = EasyPhoto.auth.GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      showError(document.getElementById('si-error'),
+        'Google sign-in is not set up yet. The app owner needs to add a Google Cloud OAuth client ID.');
+      return;
+    }
+    if (gisReady && window.google && window.google.accounts && window.google.accounts.id) {
+      window.google.accounts.id.prompt();
+      return;
+    }
+    if (gisLoading) return;
+    gisLoading = true;
+    var script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = function () {
+      gisLoading = false;
+      gisReady = true;
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: handleGoogleCredential,
+        auto_select: false
+      });
+      window.google.accounts.id.prompt();
+    };
+    script.onerror = function () {
+      gisLoading = false;
+      showError(document.getElementById('si-error'),
+        'Google sign-in could not load. Check your connection and try again.');
+    };
+    document.head.appendChild(script);
+  }
+
+  document.getElementById('google-signin-btn').addEventListener('click', startGoogleSignIn);
 
   /* ---------- create account ---------- */
   document.getElementById('form-signup').addEventListener('submit', function (e) {
@@ -83,45 +140,13 @@
     });
   });
 
-  /* ---------- agent sign-in ---------- */
-  document.getElementById('form-agent').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var email = document.getElementById('ag-email').value;
-    var key = document.getElementById('ag-key').value;
-    EasyPhoto.auth.agentSignIn(email, key).then(function (session) {
-      announce('Signed in as agent for ' + session.email + '.');
-      enterApp();
-    }).catch(function (err) {
-      showError(document.getElementById('ag-error'), err.message);
-    });
-  });
-
-  /* ---------- owner login ---------- */
-  document.getElementById('form-owner').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var email = document.getElementById('ow-email').value;
-    var password = document.getElementById('ow-password').value;
-    EasyPhoto.auth.ownerLogin(email, password).then(function (result) {
-      if (result.seed && result.seed.imported) {
-        announce('Owner signed in. Connected to Pure Photography. ' +
-          result.seed.galleries + ' past-shoot galleries with ' +
-          result.seed.photos + ' photos were added to your account.');
-      } else {
-        announce('Owner signed in. Connected to Pure Photography.');
-      }
-      enterApp();
-    }).catch(function (err) {
-      showError(document.getElementById('ow-error'), err.message);
-    });
-  });
-
   /* ---------- forgot password: request ---------- */
   document.getElementById('form-forgot').addEventListener('submit', function (e) {
     e.preventDefault();
     var email = document.getElementById('fp-email').value;
     EasyPhoto.auth.requestReset(email).then(function () {
       document.getElementById('fp-sent').hidden = false;
-      announce('Reset request sent. Your email app opened — press send in your email app. Hannah will reply with a reset code.');
+      announce('Reset request sent. Your email app opened — press send in your email app. You will be replied to with a reset code.');
     }).catch(function (err) {
       showError(document.getElementById('fp-error'), err.message);
     });

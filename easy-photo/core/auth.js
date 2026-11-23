@@ -3,27 +3,34 @@
  * Simple sign-in, local only. There is no server: accounts, password hashes,
  * and sessions live in this browser on this device.
  *
- *  - Photographers sign in with their BUSINESS EMAIL + password. Nothing
- *    else — no Google, Apple, or social sign-in.
- *  - Owner login (Mary only, purephotography6@gmail.com) signs Mary in as a
- *    photographer AND turns on the connection to her site,
- *    https://pure-photography.github.io. Her owner login is the full app,
- *    not a limited flow. When she logs out, the connection turns off.
- *    The owner password is checked only on this device: the first owner
- *    login remembers a scrambled hash of the password she types; later
- *    logins check against it. The password itself is never stored or sent
- *    anywhere, and Easy Photo cannot check it against her real photography
- *    account — there is no server that could. Mary, or Hannah acting for
- *    her, can sign in here.
- *  - Agent access: a photographer creates an agent key in Settings. Any AI
- *    (Muse, Grok, ChatGPT, or another) signs in with the photographer's
- *    business email + that key, and acts only within that photographer's
- *    account. Only a scrambled hash of each key is stored.
- *  - Forgot password is MANUAL, through Mary: the app opens the
- *    photographer's email app with a reset request addressed to Mary's
- *    inbox (purephotography6@gmail.com). Hannah replies with a reset code.
- *    The photographer enters that code in the app to set a new password.
- *    The app never generates or sends codes itself.
+ *  - Photographers sign in with their BUSINESS EMAIL + password, or with
+ *    Google (see GOOGLE_CLIENT_ID below). The sign-in screen looks the
+ *    same for everyone: email + password, Google, and a create-account
+ *    path. There is no separate owner or agent sign-in on screen.
+ *  - The app owner (purephotography6@gmail.com) is recognised by her
+ *    email behind the scenes only: she signs in with the same email +
+ *    password as anyone else, and the app gives her the full photographer
+ *    experience AND turns on the connection to her site,
+ *    https://pure-photography.github.io. When she logs out, the
+ *    connection turns off. Her password is checked only on this device:
+ *    the first login with her email remembers a scrambled hash of the
+ *    password she types; later logins check against it. The password
+ *    itself is never stored or sent anywhere, and Easy Photo cannot check
+ *    it against her real photography account — there is no server that
+ *    could.
+ *  - Agent access (kept for programmatic use; no sign-in form on screen):
+ *    a photographer creates an agent key in Settings. Any AI signs in
+ *    with the photographer's business email + that key, and acts only
+ *    within that photographer's account. Only a scrambled hash of each
+ *    key is stored.
+ *  - "Remember me" (on by default): a remembered session lives in
+ *    localStorage and survives closing the browser; an unremembered
+ *    session lives in sessionStorage and ends when the tab closes.
+ *  - Forgot password is MANUAL: the app opens the photographer's email
+ *    app with a reset request addressed to the Easy Photo team inbox
+ *    (purephotography6@gmail.com). A reset code is replied to them. The
+ *    photographer enters that code in the app to set a new password. The
+ *    app never generates or sends codes itself.
  *
  * Data scoping: after sign-in, EasyPhoto.db.currentOwner is the signed-in
  * email, and the data layer stamps it onto new records and hides other
@@ -37,6 +44,14 @@
   var SITE_FORM_URL = OWNER_SITE_URL + '/booking.html';
   var SESSION_KEY = 'easy-photo:session';
   var OWNER_KEY = 'easy-photo:owner';
+
+  /* Google sign-in (Google Identity Services, client-side only).
+   * EMPTY means Google sign-in is not set up yet: the button is shown,
+   * but signing in with Google reports that a client ID is needed.
+   * To enable it, create a Web-application OAuth client ID in Google
+   * Cloud Console (APIs & Services > Credentials) for the Easy Photo
+   * origin, and paste the client ID here. Never invent or guess one. */
+  var GOOGLE_CLIENT_ID = '';
 
   /* ---------- hashing ---------- */
 
@@ -104,26 +119,47 @@
     }
   }
 
-  /* ---------- sessions (localStorage) ---------- */
+  /* ---------- sessions: localStorage when remembered, sessionStorage when not ---------- */
 
-  function readJSON(key) {
+  function readJSONFrom(store, key) {
     try {
-      var raw = global.localStorage.getItem(key);
+      var raw = store.getItem(key);
       return raw ? JSON.parse(raw) : null;
     } catch (e) { return null; }
+  }
+
+  function readJSON(key) {
+    return readJSONFrom(global.localStorage, key) || readJSONFrom(global.sessionStorage, key);
   }
 
   function writeJSON(key, value) {
     try { global.localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* ignore */ }
   }
 
-  function setSession(session) {
+  function sessionStore() {
+    /* The store the current session lives in: remembered sessions are in
+     * localStorage, unremembered ones in sessionStorage. */
+    try {
+      if (global.sessionStorage.getItem(SESSION_KEY)) return global.sessionStorage;
+    } catch (e) { /* ignore */ }
+    return global.localStorage;
+  }
+
+  function setSession(session, remember) {
     if (!session) {
       try { global.localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+      try { global.sessionStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+      setOwnerFlag(false);
       EasyPhoto.db.setCurrentOwner(null);
       return;
     }
-    writeJSON(SESSION_KEY, session);
+    if (remember === false) {
+      try { global.localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+      try { global.sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (e) { /* ignore */ }
+    } else {
+      try { global.sessionStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+      writeJSON(SESSION_KEY, session);
+    }
     EasyPhoto.db.setCurrentOwner(session.email);
   }
 
@@ -131,8 +167,12 @@
 
   function setOwnerFlag(on) {
     try {
-      if (on) global.localStorage.setItem(OWNER_KEY, '1');
-      else global.localStorage.removeItem(OWNER_KEY);
+      if (on) {
+        sessionStore().setItem(OWNER_KEY, '1');
+      } else {
+        global.localStorage.removeItem(OWNER_KEY);
+        global.sessionStorage.removeItem(OWNER_KEY);
+      }
     } catch (e) { /* ignore */ }
   }
 
@@ -140,8 +180,9 @@
 
   function isOwner() {
     var s = getSession();
-    if (s && s.role === 'owner') return true;
-    try { return global.localStorage.getItem(OWNER_KEY) === '1'; } catch (e) { return false; }
+    if (!s) return false;
+    if (s.role === 'owner') return true;
+    try { return sessionStore().getItem(OWNER_KEY) === '1'; } catch (e) { return false; }
   }
 
   function isAgent() {
@@ -161,13 +202,38 @@
     else if (s) EasyPhoto.db.setCurrentOwner(s.email);
   }
 
+  /* Steps shared by every owner sign-in path: owner session + flag, seed
+   * galleries, and the proofs-first delivery default. The owner is
+   * recognised by her email behind the scenes only — there is no separate
+   * owner sign-in on screen. */
+  function applyOwnerSession(remember) {
+    setSession({ email: OWNER_EMAIL, name: 'Mary Robinson', role: 'owner' }, remember);
+    setOwnerFlag(true);
+    return importMaryGalleries().then(function (seed) {
+      // Mary's business default: proofs first (6 proofs), then the full
+      // gallery — always. Other photographers choose their own way.
+      return EasyPhoto.db.ready.then(function (db) {
+        return db.settings.get('gallery.deliveryMode');
+      }).then(function (mode) {
+        if (!mode) {
+          return EasyPhoto.db.ready.then(function (db) {
+            return db.settings.set('gallery.deliveryMode', 'proofs-first');
+          });
+        }
+        return null;
+      }).then(function () {
+        return { email: OWNER_EMAIL, name: 'Mary Robinson', role: 'owner', seed: seed };
+      });
+    });
+  }
+
   /* ---------- photographer accounts ---------- */
 
   function normalizeEmail(email) {
     return String(email || '').trim().toLowerCase();
   }
 
-  function signUp(name, email, password) {
+  function signUp(name, email, password, remember) {
     email = normalizeEmail(email);
     name = String(name || '').trim();
     if (!name) return Promise.reject(new Error('Please enter your business name.'));
@@ -188,12 +254,15 @@
         });
       })
       .then(function () {
-        setSession({ email: email, name: name, role: 'photographer' });
+        if (email === OWNER_EMAIL) {
+          return applyOwnerSession(remember);
+        }
+        setSession({ email: email, name: name, role: 'photographer' }, remember);
         return { email: email, name: name, role: 'photographer' };
       });
   }
 
-  function signIn(email, password) {
+  function signIn(email, password, remember) {
     email = normalizeEmail(email);
     if (!email || !password) {
       return Promise.reject(new Error('Enter your business email and password.'));
@@ -205,15 +274,21 @@
           if (hash !== acct.passwordHash) {
             throw new Error('That password is not right. Try again, or use “Forgot password?”.');
           }
-          setSession({ email: email, name: acct.name || '', role: 'photographer' });
+          if (email === OWNER_EMAIL) {
+            return applyOwnerSession(remember);
+          }
+          setSession({ email: email, name: acct.name || '', role: 'photographer' }, remember);
           return { email: email, name: acct.name || '', role: 'photographer' };
         });
       });
   }
 
-  /* ---------- owner login (Mary) ---------- */
+  /* ---------- owner login (Mary) — kept for programmatic use; no form on screen ----------
+   * The owner now signs in through the ordinary sign-in form: signIn()
+   * recognises her email and applies the same owner session. This function
+   * stays so existing callers (and the harness) keep working. */
 
-  function ownerLogin(email, password) {
+  function ownerLogin(email, password, remember) {
     email = normalizeEmail(email);
     if (email !== OWNER_EMAIL) {
       return Promise.reject(new Error('Owner login is for Mary only. Sign in with purephotography6@gmail.com.'));
@@ -248,30 +323,16 @@
           });
         });
     }).then(function () {
-      setSession({ email: OWNER_EMAIL, name: 'Mary Robinson', role: 'owner' });
-      setOwnerFlag(true);
-      return importMaryGalleries().then(function (seed) {
-        // Mary's business default: proofs first (6 proofs), then the full
-        // gallery — always. Other photographers choose their own way.
-        return EasyPhoto.db.ready.then(function (db) {
-          return db.settings.get('gallery.deliveryMode');
-        }).then(function (mode) {
-          if (!mode) {
-            return EasyPhoto.db.ready.then(function (db) {
-              return db.settings.set('gallery.deliveryMode', 'proofs-first');
-            });
-          }
-          return null;
-        }).then(function () {
-          return { email: OWNER_EMAIL, name: 'Mary Robinson', role: 'owner', first: firstLogin, seed: seed };
-        });
-      });
+      return applyOwnerSession(remember);
+    }).then(function (result) {
+      result.first = firstLogin;
+      return result;
     });
   }
 
-  /* ---------- agent sign-in ---------- */
+  /* ---------- agent sign-in — kept for programmatic use; no form on screen ---------- */
 
-  function agentSignIn(email, key) {
+  function agentSignIn(email, key, remember) {
     email = normalizeEmail(email);
     if (!email || !key) {
       return Promise.reject(new Error('Enter your business email and your agent key.'));
@@ -293,7 +354,7 @@
             setSession({
               email: email, name: (acct && acct.name) || '',
               role: 'agent', agentName: rec.name
-            });
+            }, remember);
             return { email: email, name: (acct && acct.name) || '', role: 'agent', agentName: rec.name };
           });
         });
@@ -301,7 +362,73 @@
     });
   }
 
-  /* ---------- forgot password (manual, through Mary) ---------- */
+  /* ---------- Sign in with Google (Google Identity Services) ----------
+   *
+   * The button on the sign-in screen calls this with the ID-token
+   * credential Google returns. The token is decoded client-side (there is
+   * no server to verify it against) and the email inside it is trusted
+   * the way a password would be: Google only issues that token for the
+   * account that just signed in. First Google sign-in creates the local
+   * account with a random, unusable password hash — that account can only
+   * ever sign in with Google. The owner email gets the owner session.
+   *
+   * Requires GOOGLE_CLIENT_ID above. With it empty, this rejects with a
+   * plain message saying Google sign-in is not set up yet. */
+
+  function decodeJwtPayload(token) {
+    var parts = String(token || '').split('.');
+    if (parts.length !== 3) throw new Error('bad token');
+    var b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    var binary;
+    if (typeof global.atob === 'function') {
+      binary = global.atob(b64);
+    } else if (global.Buffer) {
+      binary = global.Buffer.from(b64, 'base64').toString('binary');
+    } else {
+      throw new Error('no decoder');
+    }
+    var json = decodeURIComponent(Array.prototype.map.call(binary, function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(json);
+  }
+
+  function signInWithGoogle(credential, remember) {
+    if (!GOOGLE_CLIENT_ID) {
+      return Promise.reject(new Error('Google sign-in is not set up yet. The app owner needs to add a Google Cloud OAuth client ID.'));
+    }
+    var payload;
+    try {
+      payload = decodeJwtPayload(credential);
+    } catch (e) {
+      return Promise.reject(new Error('That Google sign-in did not return a usable account. Try again.'));
+    }
+    var email = normalizeEmail(payload && payload.email);
+    if (!email || email.indexOf('@') === -1) {
+      return Promise.reject(new Error('Google did not share an email address for that account. Try signing in with your email and password instead.'));
+    }
+    var name = String((payload && payload.name) || '').trim();
+    return EasyPhoto.db.ready.then(function (db) { return db.accounts.get(email); })
+      .then(function (acct) {
+        if (acct) return acct;
+        var random = 'google:' + (payload.sub || '') + ':' + Date.now() + ':' + Math.random();
+        return hashText(random).then(function (hash) {
+          return EasyPhoto.db.ready.then(function (db) {
+            return db.accounts.add({ email: email, name: name, passwordHash: hash });
+          });
+        });
+      })
+      .then(function () {
+        if (email === OWNER_EMAIL) {
+          return applyOwnerSession(remember);
+        }
+        setSession({ email: email, name: name, role: 'photographer' }, remember);
+        return { email: email, name: name, role: 'photographer' };
+      });
+  }
+
+  /* ---------- forgot password (manual, through the Easy Photo team) ---------- */
 
   function requestReset(email) {
     email = normalizeEmail(email);
@@ -321,7 +448,7 @@
       })
       .then(function (pending) {
         var subject = 'Easy Photo password reset request';
-        var body = 'Hello Mary,\n\n' +
+        var body = 'Hello Easy Photo team,\n\n' +
           'I forgot my Easy Photo password. Please send me a reset code.\n\n' +
           'My business email: ' + pending.email + '\n' +
           'Request code: ' + pending.code + '\n' +
@@ -502,10 +629,12 @@
     OWNER_EMAIL: OWNER_EMAIL,
     OWNER_SITE_URL: OWNER_SITE_URL,
     SITE_FORM_URL: SITE_FORM_URL,
+    GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
     hashText: hashText,
     makeAgentKey: makeAgentKey,
     signUp: signUp,
     signIn: signIn,
+    signInWithGoogle: signInWithGoogle,
     signOut: signOut,
     ownerLogin: ownerLogin,
     ownerLogout: ownerLogout,
