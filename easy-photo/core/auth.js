@@ -51,7 +51,7 @@
    * To enable it, create a Web-application OAuth client ID in Google
    * Cloud Console (APIs & Services > Credentials) for the Easy Photo
    * origin, and paste the client ID here. Never invent or guess one. */
-  var GOOGLE_CLIENT_ID = '';
+  var GOOGLE_CLIENT_ID = '355746903591-rhfqu65q7co0bpfneu9h0rla1a8k7g3c.apps.googleusercontent.com';
 
   /* ---------- hashing ---------- */
 
