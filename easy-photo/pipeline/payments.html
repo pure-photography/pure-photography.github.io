@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Payment Tracking — Easy Photo</title>
+  <link rel="stylesheet" href="payments.css">
+</head>
+<body>
+  <a class="skip-link" href="#record-payment">Skip to record payment</a>
+  <div id="live" class="visually-hidden" aria-live="polite" role="status"></div>
+
+  <header class="app-header">
+    <h1>Easy Photo — Payment Tracking</h1>
+    <nav class="app-nav" aria-label="Easy Photo sections">
+      <ul>
+      <li><a href="pipeline.html">Pipeline</a></li>
+      <li><a href="payments.html" aria-current="page">Payments</a></li>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../clients/clients.html">Clients</a></li>
+      <li><a href="../galleries/galleries.html">Galleries</a></li>
+      <li><a href="../calendar/calendar.html">Calendar</a></li>
+      <li><a href="../email/email.html">Email list</a></li>
+      <li><a href="../website/website.html">Website</a></li>
+      <li><a href="../print/print.html">Print store</a></li>
+      <li><a href="../booking/booking.html">Booking</a></li>
+      <li><a href="../settings/settings.html">Settings</a></li>
+    </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="panel" id="record-payment" aria-labelledby="record-heading">
+      <h2 id="record-heading">Record a payment</h2>
+      <form id="payment-form" novalidate>
+        <div class="form-grid">
+          <div class="field-row">
+            <label for="f-session">Session</label>
+            <select id="f-session" name="session" required></select>
+            <span class="hint" id="f-session-hint">Choose the session this payment is for.</span>
+          </div>
+          <div class="field-row">
+            <label for="f-amount">Amount (USD)</label>
+            <input type="number" id="f-amount" name="amount" min="0.01" step="0.01"
+                   inputmode="decimal" required placeholder="20.00">
+          </div>
+          <div class="field-row">
+            <label for="f-method">Method</label>
+            <select id="f-method" name="method" required>
+              <option value="cash">Cash</option>
+              <option value="cashapp">Cash App</option>
+              <option value="venmo">Venmo</option>
+              <option value="card">Card</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="field-row">
+            <label for="f-type">Type</label>
+            <select id="f-type" name="type" required>
+              <option value="retainer">Retainer (nonrefundable)</option>
+              <option value="balance" selected>Balance</option>
+              <option value="print">Print</option>
+            </select>
+            <span class="hint">Retainer is part of the session price. Prints never reduce the session balance.</span>
+          </div>
+          <div class="field-row">
+            <label for="f-date">Date</label>
+            <input type="date" id="f-date" name="date" required>
+          </div>
+          <div class="field-row">
+            <label for="f-note">Note (optional)</label>
+            <input type="text" id="f-note" name="note" maxlength="200" placeholder="e.g. Cash App from Diana">
+          </div>
+        </div>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+        <p><button type="submit" class="primary">Record payment</button></p>
+      </form>
+    </section>
+
+    <section class="panel" aria-labelledby="ledger-heading">
+      <h2 id="ledger-heading">Session ledger</h2>
+      <div class="field-row" style="max-width: 24rem; margin-bottom: 1rem;">
+        <label for="ledger-session">Show ledger for</label>
+        <select id="ledger-session"></select>
+      </div>
+      <div id="ledger-body" aria-live="off"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="totals-heading">
+      <h2 id="totals-heading">Per-client totals</h2>
+      <div class="table-wrap">
+        <table id="client-totals">
+          <caption class="visually-hidden">Totals per client: booked value, paid, outstanding session balance, print spend</caption>
+          <thead>
+            <tr>
+              <th scope="col">Client</th>
+              <th scope="col" class="num">Sessions</th>
+              <th scope="col" class="num">Booked value</th>
+              <th scope="col" class="num">Paid</th>
+              <th scope="col" class="num">Outstanding balance</th>
+              <th scope="col" class="num">Print spend</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="empty" id="totals-empty" hidden>No clients yet.</p>
+    </section>
+  </main>
+
+  <script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="../core/mary-galleries.js"></script>
+  <script src="common.js"></script>
+  <script src="payments.js"></script>
+</body>
+</html>

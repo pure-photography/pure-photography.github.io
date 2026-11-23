@@ -1,0 +1,102 @@
+/* Easy Photo — app shell layout (FOUNDATION workstream)
+ * Builds on core/a11y.css tokens. Semantic landmark styling only;
+ * feature workstreams own their own view styles. */
+
+.ep-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--ep-surface);
+  border-bottom: 3px solid var(--ep-brand);
+}
+
+.ep-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.ep-brand img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+.ep-header-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.ep-header-actions button {
+  font: inherit;
+  font-weight: 600;
+  background: transparent;
+  color: var(--ep-fg);
+  border: 2px solid var(--ep-border);
+  border-radius: var(--ep-radius);
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+}
+
+.ep-nav {
+  background: var(--ep-brand-dark);
+}
+html[data-theme="high-contrast"] .ep-nav { background: #000; border-bottom: 2px solid #fff; }
+
+.ep-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.ep-nav a {
+  display: inline-flex;
+  align-items: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-bottom: 4px solid transparent;
+}
+.ep-nav a:hover { text-decoration: underline; }
+.ep-nav a[aria-current="page"] { border-bottom-color: #ffffff; }
+
+.ep-main {
+  padding: 1.25rem 1rem 3rem;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.ep-view[hidden] { display: none; }
+
+.ep-placeholder {
+  background: var(--ep-surface);
+  border: 2px dashed var(--ep-border);
+  border-radius: var(--ep-radius);
+  padding: 1.5rem;
+}
+
+.ep-footer {
+  border-top: 3px solid var(--ep-brand);
+  background: var(--ep-surface);
+  padding: 1rem;
+  text-align: center;
+  color: var(--ep-fg-muted);
+  font-size: 0.95rem;
+}
+.ep-footer nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  padding: 0;
+  margin: 0 0 0.5rem;
+}

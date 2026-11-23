@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galleries — Easy Photo</title>
+<link rel="stylesheet" href="../core/a11y.css">
+<link rel="stylesheet" href="../core/pages.css">
+</head>
+<body>
+<a class="ep-skip-link" href="#main">Skip to main content</a>
+
+<header class="app-header">
+  <p class="brand"><span aria-hidden="true">📷</span> Easy Photo</p>
+  <nav aria-label="Primary">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="galleries.html" aria-current="page">Galleries</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../clients/clients.html">Clients</a></li>
+      <li><a href="../pipeline/pipeline.html">Pipeline</a></li>
+      <li><a href="../calendar/calendar.html">Calendar</a></li>
+      <li><a href="../email/email.html">Email list</a></li>
+      <li><a href="../website/website.html">Website</a></li>
+      <li><a href="../print/print.html">Print store</a></li>
+      <li><a href="../booking/booking.html">Booking</a></li>
+      <li><a href="../settings/settings.html">Settings</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+  <h1>Galleries</h1>
+
+  <div class="notice" role="note" aria-labelledby="storage-note-h">
+    <h2 id="storage-note-h">How gallery storage works — please read</h2>
+    <p>Your gallery photos are stored <strong>on this device, in this browser</strong>.
+    Easy Photo has no server and no cloud storage, so there is <strong>no free
+    unlimited cloud storage</strong> — photos have to live somewhere, and
+    servers cost money. The gallery tool itself is completely free; you bring
+    your own storage.</p>
+    <p>That means: back up your galleries with the Download button below.
+    To share a gallery with a client, download it as one file and send that
+    file by text or email — your client opens it in any browser, no account
+    needed. The share link on this page opens the gallery on <strong>this
+    device only</strong>.</p>
+  </div>
+
+  <!-- ============================ LIST VIEW ============================ -->
+  <section id="view-list" aria-labelledby="list-heading">
+    <h2 id="list-heading" tabindex="-1">Your galleries</h2>
+
+    <form id="gallery-form" class="card" novalidate>
+      <h3>Create a gallery</h3>
+      <div class="field">
+        <label for="gf-title">Gallery title <span class="required" aria-hidden="true">*</span></label>
+        <input type="text" id="gf-title" name="title" required autocomplete="off"
+               aria-describedby="gf-title-error">
+        <p class="error" id="gf-title-error" role="alert" hidden></p>
+      </div>
+      <div class="field">
+        <label for="gf-client">Client (optional)</label>
+        <select id="gf-client" name="clientId">
+          <option value="">No client yet</option>
+        </select>
+        <p class="hint">Pick a client from your Clients list, or leave it blank.</p>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="gf-private" name="isPrivate" checked>
+        <label for="gf-private">Private gallery — only people with the link can open it</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Create gallery</button>
+    </form>
+
+    <section class="card" aria-labelledby="gallery-list-heading">
+      <h3 id="gallery-list-heading">All galleries <span id="gallery-count"></span></h3>
+      <ul id="gallery-list" class="plain-list"></ul>
+      <p id="gallery-list-empty" class="empty" hidden>No galleries yet. Create your first one above.</p>
+    </section>
+  </section>
+
+  <!-- ============================ GALLERY DETAIL VIEW ============================ -->
+  <section id="view-gallery" aria-labelledby="gallery-title" hidden>
+    <p><button type="button" id="back-to-list" class="btn">← Back to all galleries</button></p>
+    <h2 id="gallery-title" tabindex="-1"></h2>
+    <p id="gallery-meta"></p>
+    <p>
+      <span class="ep-status" id="gallery-privacy" data-tone="success"></span>
+    </p>
+
+    <section class="card" aria-labelledby="share-heading">
+      <h3 id="share-heading">Share this gallery</h3>
+      <p>
+        <label for="share-link">Gallery link (opens on this device)</label><br>
+        <input type="text" id="share-link" readonly style="width:100%;max-width:32rem">
+      </p>
+      <p>
+        <button type="button" id="copy-link-btn" class="btn">Copy link</button>
+        <a id="text-client-btn" class="btn" href="#">Send by text</a>
+      </p>
+      <p class="hint">The link opens this gallery on this device. To send the
+      gallery to your client, use True AI below, or “Download gallery as one
+      file” — then send that file by text or email. Your client opens it in
+      any browser, no account needed.</p>
+    </section>
+
+    <!-- True AI sends the gallery: branded email or text. -->
+    <section class="card" aria-labelledby="trueai-heading">
+      <h3 id="trueai-heading">Send this gallery with True AI</h3>
+      <p>True AI is your virtual receptionist. Choose how to send the gallery
+      and True AI writes the message for you. <strong>How it goes out:</strong>
+      email goes through your connected email — True AI composes the branded
+      invite and opens it in your own email app, and you press send. Text
+      goes through your phone's texting app the same way. Easy Photo has no
+      server, so True AI cannot send anything by itself, and nothing is sent
+      silently.</p>
+
+      <div id="delivery-choice" hidden>
+        <fieldset>
+          <legend>How do you deliver galleries?</legend>
+          <div class="radio-row">
+            <input type="radio" id="dm-proofs" name="deliveryMode" value="proofs-first">
+            <label for="dm-proofs">Proofs first — send 6 proofs, then the full gallery</label>
+          </div>
+          <div class="radio-row">
+            <input type="radio" id="dm-full" name="deliveryMode" value="full">
+            <label for="dm-full">Full gallery straight away</label>
+          </div>
+        </fieldset>
+        <p><button type="button" id="save-delivery-mode-btn" class="btn btn-primary">Save my delivery choice</button></p>
+      </div>
+      <p id="delivery-mode-note" role="status"></p>
+
+      <form id="trueai-form" novalidate>
+        <div class="field">
+          <label for="ta-client">Send to</label>
+          <select id="ta-client" name="clientId">
+            <option value="">Choose a client…</option>
+          </select>
+          <p class="hint">Or fill in the name, email, and phone below.</p>
+        </div>
+        <div class="field">
+          <label for="ta-name">Client name</label>
+          <input type="text" id="ta-name" name="name" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="ta-email">Client email (for email delivery)</label>
+          <input type="email" id="ta-email" name="email" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="ta-phone">Client phone (for text delivery)</label>
+          <input type="tel" id="ta-phone" name="phone" autocomplete="tel">
+        </div>
+        <fieldset>
+          <legend>Send by</legend>
+          <div class="radio-row">
+            <input type="radio" id="ta-method-email" name="method" value="email" checked>
+            <label for="ta-method-email">Email — True AI sends a branded email invite through your connected email</label>
+          </div>
+          <div class="radio-row">
+            <input type="radio" id="ta-method-text" name="method" value="text">
+            <label for="ta-method-text">Text — True AI sends the gallery by text message through your phone's texting app</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>What to send</legend>
+          <div class="radio-row">
+            <input type="radio" id="ta-stage-proofs" name="stage" value="proofs">
+            <label for="ta-stage-proofs">Proofs — 6 preview photos</label>
+          </div>
+          <div class="radio-row">
+            <input type="radio" id="ta-stage-full" name="stage" value="full" checked>
+            <label for="ta-stage-full">Full gallery — every photo</label>
+          </div>
+        </fieldset>
+        <p class="hint" id="ta-stage-note">The full gallery always goes to your
+        client no matter what — the proofs are only a preview.</p>
+        <div class="field">
+          <label for="ta-preview">Message True AI will send</label>
+          <textarea id="ta-preview" readonly rows="8"></textarea>
+        </div>
+        <p>
+          <button type="submit" class="btn btn-primary" id="ta-send-btn">Send with True AI</button>
+        </p>
+        <p id="ta-status" role="status"></p>
+        <p id="ta-delivery-status" role="status"></p>
+      </form>
+    </section>
+
+    <!-- Watermark + password protection -->
+    <section class="card" aria-labelledby="protect-heading">
+      <h3 id="protect-heading">Watermark &amp; password</h3>
+      <form id="watermark-form" novalidate>
+        <div class="field">
+          <label for="wm-text">Watermark text</label>
+          <input type="text" id="wm-text" name="watermark" autocomplete="off"
+                 aria-describedby="wm-hint">
+          <p class="hint" id="wm-hint">Shown across every photo in this
+          gallery. For Mary's galleries this reads “Pure Photography”. Other
+          photographers use their own brand.</p>
+        </div>
+        <button type="submit" class="btn">Save watermark</button>
+      </form>
+      <form id="password-form" novalidate>
+        <div class="field">
+          <label for="gp-password">Gallery password</label>
+          <input type="password" id="gp-password" name="password" autocomplete="off"
+                 aria-describedby="gp-hint">
+          <p class="hint" id="gp-hint">Your client types this password to open
+          the gallery — no account, no sign-in, just the password. Leave it
+          empty and choose “Remove password” to turn protection off.</p>
+        </div>
+        <p id="gp-status" role="status"></p>
+        <p>
+          <button type="submit" class="btn">Set password</button>
+          <button type="button" id="gp-remove-btn" class="btn btn-danger">Remove password</button>
+        </p>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="download-heading">
+      <h3 id="download-heading">Download this gallery</h3>
+      <form id="download-form">
+        <fieldset>
+          <legend>Where should the photos go?</legend>
+          <div class="radio-row">
+            <input type="radio" id="dl-downloads" name="destination" value="downloads" checked>
+            <label for="dl-downloads">Downloads — save the whole gallery folder to your Downloads folder</label>
+          </div>
+          <div class="radio-row">
+            <input type="radio" id="dl-drive" name="destination" value="drive">
+            <label for="dl-drive">Hard drive — save to an external hard drive</label>
+          </div>
+        </fieldset>
+        <div id="drive-step" hidden>
+          <p><strong>Please insert your hard drive now.</strong> Easy Photo
+          cannot see a drive until you plug it in, and a website cannot write
+          to a drive by itself — after you insert it, choose the drive folder
+          below and the download will start.</p>
+          <button type="button" id="drive-ready-btn" class="btn">My hard drive is inserted</button>
+        </div>
+        <p id="download-status" role="status"></p>
+        <p>
+          <button type="submit" class="btn btn-primary" id="download-btn">Download photos</button>
+          <button type="button" id="download-file-btn" class="btn">Download gallery as one file (to send to a client)</button>
+        </p>
+        <p class="hint" id="download-fallback-note" hidden>Your browser does not
+        support choosing a folder, so photos will download one by one into your
+        Downloads folder. For a hard drive, move them there after the download.</p>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="upload-heading">
+      <h3 id="upload-heading">Add photos</h3>
+      <form id="upload-form" novalidate>
+        <div class="field">
+          <label for="uf-files">Choose photos <span class="required" aria-hidden="true">*</span></label>
+          <input type="file" id="uf-files" name="files" accept="image/*" multiple required
+                 aria-describedby="uf-files-hint uf-files-error">
+          <p class="hint" id="uf-files-hint">You can select more than one photo at once.</p>
+          <p class="error" id="uf-files-error" role="alert" hidden></p>
+        </div>
+        <div id="alt-fields"></div>
+        <button type="submit" class="btn btn-primary">Save photos to gallery</button>
+      </form>
+      <p class="hint">Every photo needs alt text that describes what the photo
+      shows — a screen reader reads it aloud. Photos without alt text cannot
+      be saved.</p>
+    </section>
+
+    <section aria-labelledby="photos-heading">
+      <h3 id="photos-heading">Photos <span id="photo-count"></span></h3>
+      <ul id="photo-list" class="photo-grid"></ul>
+      <p id="photo-list-empty" class="empty" hidden>No photos in this gallery yet.</p>
+    </section>
+  </section>
+
+  <!-- ============================ CLIENT VIEW (opened from a share link) ============================ -->
+  <section id="view-client" aria-labelledby="client-gallery-title" hidden>
+    <h2 id="client-gallery-title" tabindex="-1"></h2>
+    <p id="client-gallery-note">This is a private gallery link. These photos are shared with you.</p>
+    <p class="hint">No account needed — this link opens straight to your
+    gallery. No sign-in, nothing to install.</p>
+
+    <!-- Password gate: only when the photographer set a gallery password. -->
+    <form id="client-password-form" class="card" novalidate hidden>
+      <h3>This gallery is password-protected</h3>
+      <p>Your photographer set a password on this gallery. Type it to open
+      your photos — no account needed, just the password.</p>
+      <div class="field">
+        <label for="cp-password">Gallery password <span class="required" aria-hidden="true">*</span></label>
+        <input type="password" id="cp-password" name="password" required autocomplete="off">
+        <p class="error" id="cp-error" role="alert" hidden></p>
+      </div>
+      <button type="submit" class="btn btn-primary">Open my gallery</button>
+    </form>
+
+    <div id="client-content" hidden>
+      <p id="client-proofs-note" class="notice" hidden><strong>Your proofs are here!</strong>
+      These are 6 preview photos. Pick your favorites and leave notes on any
+      photo — your photographer will see them. The proofs are only a preview:
+      your full gallery is coming no matter what.</p>
+      <p><button type="button" id="client-download-btn" class="btn btn-primary">Download these photos</button></p>
+      <p id="client-download-status" role="status"></p>
+      <ul id="client-photo-list" class="photo-grid"></ul>
+      <p id="client-photo-empty" class="empty" hidden>This gallery has no photos yet.</p>
+      <div id="client-proofing" class="card" hidden>
+        <h3>Send your favorites to your photographer</h3>
+        <p>Tick “Favorite” on the photos you love, and add a note on any photo.
+        Then send your picks — your email app will open with the list, and you
+        press send. Your photographer gets your favorites by email.</p>
+        <p><button type="button" id="client-send-favorites-btn" class="btn btn-primary">Send my favorites</button></p>
+        <p id="client-proofing-status" role="status"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Easy Photo — free forever. Your photos stay on your device unless you choose to send them.</p>
+</footer>
+
+<script src="../core/a11y.js"></script>
+<script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="../core/trueai.js"></script>
+<script src="../core/mary-galleries.js"></script>
+<script src="galleries.js"></script>
+</body>
+</html>

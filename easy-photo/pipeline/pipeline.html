@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Booking Pipeline — Easy Photo</title>
+  <link rel="stylesheet" href="pipeline.css">
+</head>
+<body>
+  <a class="skip-link" href="#pipeline">Skip to pipeline</a>
+  <div id="live" class="visually-hidden" aria-live="polite" role="status"></div>
+
+  <header class="app-header">
+    <h1>Easy Photo — Booking Pipeline</h1>
+    <nav class="app-nav" aria-label="Easy Photo sections">
+      <ul>
+      <li><a href="pipeline.html" aria-current="page">Pipeline</a></li>
+      <li><a href="payments.html">Payments</a></li>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../clients/clients.html">Clients</a></li>
+      <li><a href="../galleries/galleries.html">Galleries</a></li>
+      <li><a href="../calendar/calendar.html">Calendar</a></li>
+      <li><a href="../email/email.html">Email list</a></li>
+      <li><a href="../website/website.html">Website</a></li>
+      <li><a href="../print/print.html">Print store</a></li>
+      <li><a href="../booking/booking.html">Booking</a></li>
+      <li><a href="../settings/settings.html">Settings</a></li>
+    </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="panel" aria-labelledby="reminders-heading">
+      <h2 id="reminders-heading">Reminders <span class="count" id="reminders-count">0</span></h2>
+      <ul class="reminder-list" id="reminders-list" aria-label="Due reminders"></ul>
+      <p class="reminder-empty" id="reminders-empty" hidden>Nothing due right now. Nice work.</p>
+    </section>
+
+    <div class="columns" id="pipeline" aria-label="Booking stages">
+      <section class="column" aria-labelledby="col-inquiry">
+        <h2 id="col-inquiry">Inquiry <span class="count" id="count-inquiry">0</span></h2>
+        <ul class="cards" id="list-inquiry" aria-label="Inquiry sessions"></ul>
+      </section>
+      <section class="column" aria-labelledby="col-booked">
+        <h2 id="col-booked">Booked <span class="count" id="count-booked">0</span></h2>
+        <ul class="cards" id="list-booked" aria-label="Booked sessions"></ul>
+      </section>
+      <section class="column" aria-labelledby="col-shot">
+        <h2 id="col-shot">Shot <span class="count" id="count-shot">0</span></h2>
+        <ul class="cards" id="list-shot" aria-label="Shot sessions"></ul>
+      </section>
+      <section class="column" aria-labelledby="col-delivered">
+        <h2 id="col-delivered">Delivered <span class="count" id="count-delivered">0</span></h2>
+        <ul class="cards" id="list-delivered" aria-label="Delivered sessions"></ul>
+      </section>
+      <section class="column" aria-labelledby="col-paid">
+        <h2 id="col-paid">Paid <span class="count" id="count-paid">0</span></h2>
+        <ul class="cards" id="list-paid" aria-label="Paid sessions"></ul>
+      </section>
+    </div>
+
+    <section class="panel closed-section" aria-labelledby="closed-heading">
+      <h2 id="closed-heading">Lost / Cancelled <span class="count" id="count-closed">0</span></h2>
+      <ul class="cards" id="list-closed" aria-label="Lost and cancelled sessions"></ul>
+    </section>
+
+    <div class="seed-bar">
+      <button type="button" id="seed-btn" class="small" hidden>Load demo data</button>
+    </div>
+  </main>
+
+  <script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="../core/mary-galleries.js"></script>
+  <script src="common.js"></script>
+  <script src="reminders.js"></script>
+  <script src="pipeline.js"></script>
+</body>
+</html>

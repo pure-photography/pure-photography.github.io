@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Print store — Easy Photo</title>
+<link rel="stylesheet" href="../core/a11y.css">
+<link rel="stylesheet" href="../core/pages.css">
+</head>
+<body>
+<a class="ep-skip-link" href="#main">Skip to main content</a>
+
+<header class="app-header">
+  <p class="brand"><span aria-hidden="true">📷</span> Easy Photo</p>
+  <nav aria-label="Primary">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../galleries/galleries.html">Galleries</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../clients/clients.html">Clients</a></li>
+      <li><a href="../pipeline/pipeline.html">Pipeline</a></li>
+      <li><a href="../calendar/calendar.html">Calendar</a></li>
+      <li><a href="../email/email.html">Email list</a></li>
+      <li><a href="../website/website.html">Website</a></li>
+      <li><a href="print.html">Print store</a></li>
+      <li><a href="../booking/booking.html">Booking</a></li>
+      <li><a href="../settings/settings.html">Settings</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+  <h1>Print store</h1>
+  <p>Sell prints of your photos. Connect the print store you already use, or
+  set one up free with Printify. Easy Photo takes no cut and charges no fees.</p>
+
+  <section class="card" aria-labelledby="existing-heading">
+    <h2 id="existing-heading">Connect a print store you already have</h2>
+    <form id="existing-form" novalidate>
+      <div class="field">
+        <label for="ps-name">Store name</label>
+        <input type="text" id="ps-name" name="name" autocomplete="organization"
+               aria-describedby="ps-name-hint">
+        <p class="hint" id="ps-name-hint">For example: “My Printify store” or “My Etsy print shop”.</p>
+      </div>
+      <div class="field">
+        <label for="ps-url">Store web address <span class="required" aria-hidden="true">*</span></label>
+        <input type="url" id="ps-url" name="url" placeholder="https://example.com"
+               aria-describedby="ps-url-error">
+        <p class="error" id="ps-url-error" role="alert" hidden></p>
+      </div>
+      <button type="submit" class="btn btn-primary">Connect my print store</button>
+    </form>
+    <p id="ps-saved" hidden>Connected: <a id="ps-saved-link" href="#" target="_blank" rel="noopener"></a>
+      <button type="button" id="ps-disconnect-btn" class="btn btn-danger">Disconnect</button></p>
+  </section>
+
+  <section class="card" aria-labelledby="printify-heading">
+    <h2 id="printify-heading">No print store yet? Set one up free with Printify</h2>
+    <p>Printify is a print-on-demand service: your clients order prints, and
+    Printify prints and ships them. Joining Printify is free. Easy Photo
+    cannot create the Printify account for you — you sign up on Printify's
+    own website with your own email, which takes a few minutes. Then come
+    back here and connect it.</p>
+    <ol>
+      <li><a href="https://printify.com/" target="_blank" rel="noopener">Open Printify and create your free account (opens in a new tab)</a></li>
+      <li>On Printify, connect a sales channel or create your first product.</li>
+      <li>Come back here and connect your store with the form above, or paste
+      your Printify shop link there.</li>
+    </ol>
+    <p class="hint">Printify may ask for a payment method for its own paid
+    plan — the free plan needs no payment. Easy Photo never asks for your
+    Printify password.</p>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Easy Photo — free forever. Your print store details stay on your device.</p>
+</footer>
+
+<script src="../core/a11y.js"></script>
+<script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="../core/mary-galleries.js"></script>
+<script src="print.js"></script>
+</body>
+</html>

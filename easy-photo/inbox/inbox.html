@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Inbox — Easy Photo CRM</title>
+  <link rel="stylesheet" href="inbox.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="brand">Easy Photo <span aria-hidden="true">·</span> CRM</p>
+      <h1>Smart Inbox</h1>
+      <p class="tagline">Availability is always checked <strong>before</strong> a lead is created. Never the reverse.</p>
+    </div>
+    <nav aria-label="Inbox sections">
+      <ul class="section-nav">
+      <li><a href="#simulator">Simulate message</a></li>
+      <li><a href="#queue">Message queue</a></li>
+      <li><a href="#leads">Leads</a></li>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../clients/clients.html">Clients</a></li>
+      <li><a href="../pipeline/pipeline.html">Pipeline</a></li>
+      <li><a href="../galleries/galleries.html">Galleries</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../calendar/calendar.html">Calendar</a></li>
+      <li><a href="../email/email.html">Email list</a></li>
+      <li><a href="../website/website.html">Website</a></li>
+      <li><a href="../print/print.html">Print store</a></li>
+      <li><a href="../booking/booking.html">Booking</a></li>
+      <li><a href="../settings/settings.html">Settings</a></li>
+    </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- Screen-reader announcements for availability results, lead creation, conversions -->
+    <div id="announcements" class="sr-only" aria-live="polite" role="status"></div>
+
+    <!-- 1. SIMULATOR -->
+    <section id="simulator" aria-labelledby="simulator-heading">
+      <h2 id="simulator-heading">Simulate an incoming message</h2>
+      <p class="hint">
+        Production note: in production, messages arrive automatically from SMS, email, and DM
+        integrations. This panel simulates an inbound message so the availability-first flow can
+        be tested end-to-end. Every message below must pass the availability check before a lead
+        can be created from it.
+      </p>
+      <form id="simulate-form" aria-describedby="simulator-heading">
+        <fieldset>
+          <legend>Channel</legend>
+          <div class="radio-row" role="radiogroup" aria-label="Message channel">
+            <label class="radio-pill"><input type="radio" name="channel" value="sms" checked> <span aria-hidden="true">💬</span> SMS</label>
+            <label class="radio-pill"><input type="radio" name="channel" value="email"> <span aria-hidden="true">✉️</span> Email</label>
+            <label class="radio-pill"><input type="radio" name="channel" value="dm"> <span aria-hidden="true">📩</span> DM</label>
+          </div>
+        </fieldset>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="sim-name">Sender name</label>
+            <input type="text" id="sim-name" name="name" autocomplete="name" required placeholder="e.g. Diana Evans">
+          </div>
+          <div class="field">
+            <label for="sim-contact">Contact (phone or email)</label>
+            <input type="text" id="sim-contact" name="contact" autocomplete="tel" required placeholder="e.g. 555-0142 or diana@example.com">
+          </div>
+          <div class="field">
+            <label for="sim-date">Requested session date</label>
+            <input type="date" id="sim-date" name="requestedDate" required>
+          </div>
+          <div class="field field-full">
+            <label for="sim-message">Message text</label>
+            <textarea id="sim-message" name="message" rows="3" required placeholder="e.g. Hi! I'd love to book a couples session. Are you free on Saturday?"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add message to queue</button>
+      </form>
+    </section>
+
+    <!-- 2. MESSAGE QUEUE -->
+    <section id="queue" aria-labelledby="queue-heading">
+      <h2 id="queue-heading">Message queue <span id="queue-count" class="count" aria-hidden="true"></span></h2>
+      <p class="hint">Each message below is waiting on its availability check. The check always comes first.</p>
+      <ul id="message-list" class="message-list"></ul>
+      <p id="queue-empty" class="empty-note">No pending messages. Simulate one above to start.</p>
+    </section>
+
+    <!-- 3. AVAILABILITY CHECK PANEL -->
+    <section id="availability" aria-labelledby="availability-heading" hidden>
+      <h2 id="availability-heading" tabindex="-1">Availability check</h2>
+      <p id="check-context" class="check-context"></p>
+
+      <div id="availability-result" class="result-banner" aria-hidden="false"></div>
+
+      <h3>Mini date strip <span class="hint-inline">— pick another date to recheck</span></h3>
+      <div id="date-strip" class="date-strip" role="group" aria-label="Dates around the requested date, with availability status"></div>
+
+      <div id="free-actions" hidden>
+        <p class="success-note"><span aria-hidden="true">✅</span> The date is free. You may now create the lead.</p>
+        <button id="create-lead-btn" type="button" class="btn btn-primary btn-large">Create lead</button>
+      </div>
+
+      <div id="conflict-actions" hidden>
+        <div class="conflict-box" role="alert">
+          <p><span aria-hidden="true">⚠️</span> <strong id="conflict-text"></strong></p>
+          <p>Suggest an alternate date below, recheck it, then create the lead.</p>
+        </div>
+        <h3>Suggest an alternate date</h3>
+        <div class="field inline-field">
+          <label for="alternate-date">Alternate date</label>
+          <input type="date" id="alternate-date">
+          <button id="recheck-btn" type="button" class="btn">Recheck this date</button>
+        </div>
+        <div id="suggested-dates" class="suggested-dates" aria-label="Suggested free dates"></div>
+      </div>
+
+      <button id="cancel-check-btn" type="button" class="btn btn-ghost">Cancel check</button>
+    </section>
+
+    <!-- 4. LEADS -->
+    <section id="leads" aria-labelledby="leads-heading">
+      <h2 id="leads-heading">Leads <span id="lead-count" class="count" aria-hidden="true"></span></h2>
+      <div class="field filter-field">
+        <label for="lead-filter">Filter by status</label>
+        <select id="lead-filter">
+          <option value="all">All leads</option>
+          <option value="new">New</option>
+          <option value="contacted">Contacted</option>
+          <option value="converted">Converted</option>
+          <option value="lost">Lost</option>
+        </select>
+      </div>
+      <ul id="lead-list" class="lead-list"></ul>
+      <p id="leads-empty" class="empty-note">No leads yet. Check a message's availability and create your first lead.</p>
+    </section>
+
+    <!-- 5. CONVERT TO BOOKING (inline form) -->
+    <section id="convert" aria-labelledby="convert-heading" hidden>
+      <h2 id="convert-heading" tabindex="-1">Convert lead to booking</h2>
+      <p id="convert-context" class="check-context"></p>
+      <form id="convert-form">
+        <div class="form-grid">
+          <div class="field">
+            <label for="conv-date">Session date</label>
+            <input type="date" id="conv-date" required>
+          </div>
+          <div class="field">
+            <label for="conv-time">Session time</label>
+            <input type="time" id="conv-time" value="10:00">
+          </div>
+          <div class="field">
+            <label for="conv-location">Location</label>
+            <input type="text" id="conv-location" autocomplete="off" placeholder="e.g. York City Park">
+          </div>
+          <div class="field">
+            <label for="conv-price">Price (USD)</label>
+            <input type="number" id="conv-price" min="0" step="1" value="10" inputmode="numeric">
+          </div>
+        </div>
+        <p class="hint">Converting will: create a client record, move the session from <em>inquiry</em> to <em>booked</em>, and mark the date as booked on the availability calendar.</p>
+        <button type="submit" class="btn btn-primary">Confirm booking</button>
+        <button type="button" id="cancel-convert-btn" class="btn btn-ghost">Cancel</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Easy Photo — Smart Inbox workstream. Data contract: shared <code>db.js</code> (in progress); this page currently runs on a clearly-marked local shim with the same interface.</p>
+  </footer>
+
+  <script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="../core/mary-galleries.js"></script>
+  <script src="inbox.js"></script>
+</body>
+</html>

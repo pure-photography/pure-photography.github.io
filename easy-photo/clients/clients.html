@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clients — Easy Photo</title>
+<link rel="stylesheet" href="clients.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<!-- Screen-reader announcements for add / update / delete actions -->
+<div id="announcer" class="sr-only" role="status" aria-live="polite"></div>
+
+<header class="app-header">
+  <p class="brand"><span aria-hidden="true">📷</span> Easy Photo</p>
+  <nav aria-label="Primary">
+    <ul>
+      <li><a href="clients.html" aria-current="page">Clients</a></li>
+      <li><a href="#upcoming-section">Upcoming sessions</a></li>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../pipeline/pipeline.html">Pipeline</a></li>
+      <li><a href="../galleries/galleries.html">Galleries</a></li>
+      <li><a href="../calendar/calendar.html">Calendar</a></li>
+      <li><a href="../email/email.html">Email list</a></li>
+      <li><a href="../website/website.html">Website</a></li>
+      <li><a href="../print/print.html">Print store</a></li>
+      <li><a href="../booking/booking.html">Booking</a></li>
+      <li><a href="../settings/settings.html">Settings</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+  <h1>Clients</h1>
+
+  <!-- ============================ LIST VIEW ============================ -->
+  <section id="view-list" aria-labelledby="list-heading">
+    <h2 id="list-heading" tabindex="-1">All clients</h2>
+
+    <div class="toolbar" role="group" aria-label="Client actions">
+      <div class="field-inline">
+        <label for="search">Search clients</label>
+        <input type="search" id="search" name="search" autocomplete="off"
+               placeholder="Name, email, or phone"
+               aria-describedby="search-hint">
+        <p class="hint" id="search-hint">Searches name, email, and phone number.</p>
+      </div>
+      <div class="toolbar-buttons">
+        <button type="button" id="add-client-btn" class="btn btn-primary">Add client</button>
+        <button type="button" id="load-demo-btn" class="btn" hidden>Load demo data</button>
+        <button type="button" id="clear-demo-btn" class="btn btn-danger-outline" hidden>Clear demo data</button>
+      </div>
+    </div>
+    <p id="demo-note" class="demo-note" hidden>
+      <strong>Demo data</strong> — the clients below are samples so you can try everything out.
+      They are clearly labeled and can be removed any time with “Clear demo data”.
+    </p>
+
+    <section id="upcoming-section" aria-labelledby="upcoming-heading" class="card">
+      <h3 id="upcoming-heading">Upcoming sessions</h3>
+      <ul id="upcoming-list" class="upcoming-list"></ul>
+      <p id="upcoming-empty" class="empty" hidden>No upcoming sessions scheduled.</p>
+    </section>
+
+    <section aria-labelledby="client-list-heading" class="card">
+      <h3 id="client-list-heading">Client list <span id="client-count" class="count"></span></h3>
+      <ul id="client-list" class="client-list"></ul>
+      <p id="client-list-empty" class="empty" hidden>
+        No clients yet. Select “Add client” to add your first client.
+      </p>
+      <p id="client-list-no-results" class="empty" hidden>
+        No clients match your search.
+      </p>
+    </section>
+  </section>
+
+  <!-- ============================ CLIENT FORM VIEW ============================ -->
+  <section id="view-form" aria-labelledby="form-heading" hidden>
+    <h2 id="form-heading" tabindex="-1">Add client</h2>
+    <form id="client-form" novalidate class="card">
+      <div class="field">
+        <label for="cf-name">Full name <span class="required" aria-hidden="true">*</span></label>
+        <input type="text" id="cf-name" name="name" required autocomplete="name"
+               aria-describedby="cf-name-error">
+        <p class="error" id="cf-name-error" role="alert" hidden></p>
+      </div>
+      <div class="field">
+        <label for="cf-email">Email</label>
+        <input type="email" id="cf-email" name="email" autocomplete="email"
+               aria-describedby="cf-email-error">
+        <p class="error" id="cf-email-error" role="alert" hidden></p>
+      </div>
+      <div class="field">
+        <label for="cf-phone">Phone</label>
+        <input type="tel" id="cf-phone" name="phone" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label for="cf-address">Address</label>
+        <textarea id="cf-address" name="address" rows="2" autocomplete="street-address"></textarea>
+      </div>
+      <div class="field">
+        <label for="cf-source">How did they find you?</label>
+        <input type="text" id="cf-source" name="source" list="source-options" autocomplete="off">
+        <datalist id="source-options">
+          <option value="Referral"></option>
+          <option value="Instagram"></option>
+          <option value="Facebook"></option>
+          <option value="Google"></option>
+          <option value="Website"></option>
+          <option value="Returning client"></option>
+          <option value="Other"></option>
+        </datalist>
+      </div>
+      <div class="field">
+        <label for="cf-tags">Tags</label>
+        <input type="text" id="cf-tags" name="tags" autocomplete="off"
+               aria-describedby="cf-tags-hint" placeholder="family, repeat, portraits">
+        <p class="hint" id="cf-tags-hint">Separate tags with commas.</p>
+      </div>
+      <div class="field">
+        <label for="cf-notes">Notes</label>
+        <textarea id="cf-notes" name="notes" rows="3"></textarea>
+      </div>
+      <p class="required-note"><span class="required" aria-hidden="true">*</span> Required field.</p>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="client-form-submit">Save client</button>
+        <button type="button" class="btn" id="client-form-cancel">Cancel</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============================ CLIENT DETAIL VIEW ============================ -->
+  <section id="view-detail" aria-labelledby="detail-heading" hidden>
+    <button type="button" id="back-to-list" class="btn btn-link">← Back to clients</button>
+    <div class="detail-header">
+      <h2 id="detail-heading" tabindex="-1"></h2>
+      <div class="detail-actions">
+        <button type="button" id="edit-client-btn" class="btn">Edit client</button>
+        <button type="button" id="delete-client-btn" class="btn btn-danger">Delete client</button>
+      </div>
+    </div>
+
+    <section class="card" aria-labelledby="profile-heading">
+      <h3 id="profile-heading">Profile</h3>
+      <dl id="profile-list" class="profile"></dl>
+    </section>
+
+    <section class="card" aria-labelledby="sessions-heading">
+      <div class="section-header">
+        <h3 id="sessions-heading">Sessions</h3>
+        <button type="button" id="toggle-session-form" class="btn" aria-expanded="false"
+                aria-controls="session-form-wrap">Add session</button>
+      </div>
+      <div id="session-form-wrap" hidden>
+        <form id="session-form" novalidate aria-label="Add a session">
+          <div class="form-grid">
+            <div class="field">
+              <label for="sf-type">Session type <span class="required" aria-hidden="true">*</span></label>
+              <input type="text" id="sf-type" name="type" required
+                     aria-describedby="sf-type-error" placeholder="Portrait session">
+              <p class="error" id="sf-type-error" role="alert" hidden></p>
+            </div>
+            <div class="field">
+              <label for="sf-date">Date <span class="required" aria-hidden="true">*</span></label>
+              <input type="date" id="sf-date" name="date" required aria-describedby="sf-date-error">
+              <p class="error" id="sf-date-error" role="alert" hidden></p>
+            </div>
+            <div class="field">
+              <label for="sf-time">Time</label>
+              <input type="time" id="sf-time" name="time">
+            </div>
+            <div class="field">
+              <label for="sf-location">Location</label>
+              <input type="text" id="sf-location" name="location" placeholder="York City Park">
+            </div>
+            <div class="field">
+              <label for="sf-status">Status</label>
+              <select id="sf-status" name="status">
+                <option value="scheduled">Scheduled</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+                <option value="no-show">No-show</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="sf-price">Price ($)</label>
+              <input type="number" id="sf-price" name="price" min="0" step="0.01" value="30">
+            </div>
+            <div class="field">
+              <label for="sf-retainer">Retainer paid ($)</label>
+              <input type="number" id="sf-retainer" name="retainerPaid" min="0" step="0.01" value="0"
+                     aria-describedby="sf-retainer-hint">
+              <p class="hint" id="sf-retainer-hint">Recorded as a retainer payment automatically.</p>
+            </div>
+            <div class="field">
+              <label for="sf-retainer-method">Retainer payment method</label>
+              <select id="sf-retainer-method" name="retainerMethod">
+                <option value="Cash App">Cash App</option>
+                <option value="PayPal">PayPal</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="sf-notes">Session notes</label>
+            <textarea id="sf-notes" name="notes" rows="2"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save session</button>
+            <button type="button" class="btn" id="session-form-cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+      <div class="table-scroll" role="region" aria-labelledby="sessions-heading" tabindex="0">
+        <table id="sessions-table">
+          <caption class="sr-only">Session history for this client</caption>
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Type</th>
+              <th scope="col">Location</th>
+              <th scope="col">Status</th>
+              <th scope="col">Price</th>
+              <th scope="col">Paid</th>
+              <th scope="col">Balance</th>
+              <th scope="col"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="sessions-tbody"></tbody>
+        </table>
+      </div>
+      <p id="sessions-empty" class="empty" hidden>No sessions yet for this client.</p>
+    </section>
+
+    <section class="card" aria-labelledby="payments-heading">
+      <div class="section-header">
+        <h3 id="payments-heading">Payments</h3>
+        <button type="button" id="toggle-payment-form" class="btn" aria-expanded="false"
+                aria-controls="payment-form-wrap">Add payment</button>
+      </div>
+      <div id="payment-form-wrap" hidden>
+        <form id="payment-form" novalidate aria-label="Add a payment">
+          <div class="form-grid">
+            <div class="field">
+              <label for="pf-session">Session <span class="required" aria-hidden="true">*</span></label>
+              <select id="pf-session" name="sessionId" required aria-describedby="pf-session-error"></select>
+              <p class="error" id="pf-session-error" role="alert" hidden></p>
+            </div>
+            <div class="field">
+              <label for="pf-amount">Amount ($) <span class="required" aria-hidden="true">*</span></label>
+              <input type="number" id="pf-amount" name="amount" step="0.01" required
+                     aria-describedby="pf-amount-error">
+              <p class="error" id="pf-amount-error" role="alert" hidden></p>
+            </div>
+            <div class="field">
+              <label for="pf-method">Method</label>
+              <select id="pf-method" name="method">
+                <option value="Cash App">Cash App</option>
+                <option value="PayPal">PayPal</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="pf-date">Date <span class="required" aria-hidden="true">*</span></label>
+              <input type="date" id="pf-date" name="date" required aria-describedby="pf-date-error">
+              <p class="error" id="pf-date-error" role="alert" hidden></p>
+            </div>
+            <div class="field">
+              <label for="pf-type">Type</label>
+              <select id="pf-type" name="type">
+                <option value="payment">Payment</option>
+                <option value="retainer">Retainer</option>
+                <option value="refund">Refund</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="pf-note">Note</label>
+              <input type="text" id="pf-note" name="note">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save payment</button>
+            <button type="button" class="btn" id="payment-form-cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+      <div class="table-scroll" role="region" aria-labelledby="payments-heading" tabindex="0">
+        <table id="payments-table">
+          <caption class="sr-only">All payments from this client</caption>
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Session</th>
+              <th scope="col">Type</th>
+              <th scope="col">Method</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Note</th>
+              <th scope="col"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="payments-tbody"></tbody>
+        </table>
+      </div>
+      <p id="payments-empty" class="empty" hidden>No payments recorded for this client.</p>
+    </section>
+
+    <section class="card" aria-labelledby="notes-heading">
+      <h3 id="notes-heading">Notes timeline</h3>
+      <form id="note-form" aria-label="Add a note">
+        <div class="field">
+          <label for="nf-text">Add a note</label>
+          <textarea id="nf-text" name="text" rows="2" required
+                    aria-describedby="nf-text-error" placeholder="Call went well, wants fall photos…"></textarea>
+          <p class="error" id="nf-text-error" role="alert" hidden></p>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Add note</button>
+        </div>
+      </form>
+      <ol id="notes-timeline" class="notes-timeline"></ol>
+      <p id="notes-empty" class="empty" hidden>No notes yet.</p>
+    </section>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Easy Photo — free forever. Your data stays on this device.</p>
+</footer>
+
+<script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="../core/mary-galleries.js"></script>
+<script src="sessions.js"></script>
+<script src="seed.js"></script>
+<script src="clients.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website — Easy Photo</title>
+<link rel="stylesheet" href="../core/a11y.css">
+<link rel="stylesheet" href="../core/pages.css">
+</head>
+<body>
+<a class="ep-skip-link" href="#main">Skip to main content</a>
+
+<header class="app-header">
+  <p class="brand"><span aria-hidden="true">📷</span> Easy Photo</p>
+  <nav aria-label="Primary">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../galleries/galleries.html">Galleries</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../clients/clients.html">Clients</a></li>
+      <li><a href="../pipeline/pipeline.html">Pipeline</a></li>
+      <li><a href="../calendar/calendar.html">Calendar</a></li>
+      <li><a href="../email/email.html">Email list</a></li>
+      <li><a href="website.html" aria-current="page">Website</a></li>
+      <li><a href="../print/print.html">Print store</a></li>
+      <li><a href="../booking/booking.html">Booking</a></li>
+      <li><a href="../settings/settings.html">Settings</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+  <h1>Your website</h1>
+  <p>Two ways to use Easy Photo with a website: build a simple one-page site
+  here, or connect the website you already have so its leads land in your
+  Inbox. Both are free.</p>
+
+  <div id="owner-site-note" class="notice" hidden>
+    <h2>Your site is already connected</h2>
+    <p>You are signed in as the owner. Your website,
+    <a href="https://pure-photography.github.io">Pure Photography</a>, is
+    already connected to Easy Photo. You can still build a new page below if
+    you like.</p>
+  </div>
+
+  <!-- The setup question: Do you have a website? -->
+  <section class="card" id="website-question" aria-labelledby="website-question-h">
+    <h2 id="website-question-h">Do you have a website?</h2>
+    <p>
+      <button type="button" id="has-website-yes" class="btn btn-yes-purple"
+              aria-label="Yes, I have a website — connect my existing website">Yes</button>
+      <button type="button" id="has-website-no" class="btn btn-no-red"
+              aria-label="No, I do not have a website — build one for me">No</button>
+    </p>
+    <p class="hint">“Yes” connects the website you already have. “No” takes
+    you to the website builder instead. Both buttons are rectangles: Yes is
+    purple, No is red.</p>
+  </section>
+
+  <section class="card" id="builder-section" aria-labelledby="builder-heading" hidden>
+    <h2 id="builder-heading">Build a simple website</h2>
+    <p>Fill in your details and Easy Photo builds a one-page website for you.
+    Download it as a file and put it on any free host (for example GitHub
+    Pages), or send it to someone who hosts websites for you.</p>
+    <form id="builder-form" novalidate>
+      <div class="field">
+        <label for="wb-name">Business name <span class="required" aria-hidden="true">*</span></label>
+        <input type="text" id="wb-name" name="name" required autocomplete="organization"
+               aria-describedby="wb-name-error">
+        <p class="error" id="wb-name-error" role="alert" hidden></p>
+      </div>
+      <div class="field">
+        <label for="wb-tagline">Tagline</label>
+        <input type="text" id="wb-tagline" name="tagline" autocomplete="off"
+               aria-describedby="wb-tagline-hint">
+        <p class="hint" id="wb-tagline-hint">For example: “True-to-color family photography in York, SC.”</p>
+      </div>
+      <div class="field">
+        <label for="wb-services">Services (one per line)</label>
+        <textarea id="wb-services" name="services" aria-describedby="wb-services-hint"></textarea>
+        <p class="hint" id="wb-services-hint">For example: Portraits, Families, Baptisms — one per line.</p>
+      </div>
+      <div class="field">
+        <label for="wb-email">Contact email</label>
+        <input type="email" id="wb-email" name="email" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="wb-phone">Contact phone (optional)</label>
+        <input type="tel" id="wb-phone" name="phone" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label for="wb-area">Where you shoot</label>
+        <input type="text" id="wb-area" name="area" autocomplete="off">
+      </div>
+      <p>
+        <button type="submit" class="btn btn-primary">Build my website</button>
+        <button type="button" id="wb-download-btn" class="btn" hidden>Download website file</button>
+      </p>
+    </form>
+    <div id="wb-preview" aria-live="polite"></div>
+    <p><button type="button" id="change-answer-btn-2" class="btn">Change my answer to “Do you have a website?”</button></p>
+  </section>
+
+  <section class="card" id="connect-section" aria-labelledby="connect-heading" hidden>
+    <h2 id="connect-heading">Connect your existing website</h2>
+    <p>Easy Photo searches Google for the website that matches your business
+    email, and connects the website it finds. If Google finds no website
+    matching your email, or finds more than one, or finds the wrong one — or
+    if you would rather just paste it yourself — use the “Paste a link”
+    button below and paste your website address. Easy Photo never guesses or
+    connects the wrong site.</p>
+    <p>
+      <button type="button" id="google-search-btn" class="btn btn-primary">Search Google for my website</button>
+      <button type="button" id="paste-link-btn" class="btn">Paste a link</button>
+    </p>
+    <p id="google-search-status" role="status"></p>
+    <form id="connect-form" novalidate>
+      <div class="field">
+        <label for="wc-url">Your website address</label>
+        <input type="url" id="wc-url" name="url" placeholder="https://example.com"
+               aria-describedby="wc-url-hint wc-url-error">
+        <p class="hint" id="wc-url-hint">Include the https:// at the start. Paste
+        your website address here — use this when Google finds nothing, finds
+        more than one site, or finds the wrong one.</p>
+        <p class="error" id="wc-url-error" role="alert" hidden></p>
+      </div>
+      <button type="submit" class="btn btn-primary">Connect this website</button>
+    </form>
+    <p id="wc-saved" hidden>Saved: <a id="wc-saved-link" href="#" target="_blank" rel="noopener"></a></p>
+    <h3>Get leads from your website</h3>
+    <p>Put this booking link on your website — anyone who fills it in lands
+    in your Inbox as a lead:</p>
+    <p>
+      <label for="booking-link">Booking form link</label><br>
+      <input type="text" id="booking-link" readonly style="width:100%;max-width:32rem">
+    </p>
+    <p><button type="button" id="copy-booking-link-btn" class="btn">Copy booking link</button></p>
+    <p><button type="button" id="change-answer-btn" class="btn">Change my answer to “Do you have a website?”</button></p>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Easy Photo — free forever. Your website details stay on your device.</p>
+</footer>
+
+<script src="../core/a11y.js"></script>
+<script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="../core/mary-galleries.js"></script>
+<script src="website.js"></script>
+</body>
+</html>

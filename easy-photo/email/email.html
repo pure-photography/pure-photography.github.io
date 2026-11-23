@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email list — Easy Photo</title>
+<link rel="stylesheet" href="../core/a11y.css">
+<link rel="stylesheet" href="../core/pages.css">
+</head>
+<body>
+<a class="ep-skip-link" href="#main">Skip to main content</a>
+
+<header class="app-header">
+  <p class="brand"><span aria-hidden="true">📷</span> Easy Photo</p>
+  <nav aria-label="Primary">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../galleries/galleries.html">Galleries</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../clients/clients.html">Clients</a></li>
+      <li><a href="../pipeline/pipeline.html">Pipeline</a></li>
+      <li><a href="../calendar/calendar.html">Calendar</a></li>
+      <li><a href="email.html">Email list</a></li>
+      <li><a href="../website/website.html">Website</a></li>
+      <li><a href="../print/print.html">Print store</a></li>
+      <li><a href="../booking/booking.html">Booking</a></li>
+      <li><a href="../settings/settings.html">Settings</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+  <h1>Email list</h1>
+  <p>Build an email list of clients and fans, and email them news, mini-sessions,
+  and offers. Easy Photo does not send email itself — when you choose “Email
+  everyone,” your own email app opens with everyone addressed. Only people who
+  asked to join go on this list.</p>
+
+  <form id="subscriber-form" class="card" novalidate>
+    <h2>Add someone to the list</h2>
+    <div class="field">
+      <label for="sf-name">Name</label>
+      <input type="text" id="sf-name" name="name" autocomplete="name">
+    </div>
+    <div class="field">
+      <label for="sf-email">Email address <span class="required" aria-hidden="true">*</span></label>
+      <input type="email" id="sf-email" name="email" required autocomplete="email"
+             aria-describedby="sf-email-error">
+      <p class="error" id="sf-email-error" role="alert" hidden></p>
+    </div>
+    <div class="field">
+      <label for="sf-source">Where did they join from?</label>
+      <select id="sf-source" name="source">
+        <option value="website">Website</option>
+        <option value="booking">Booking form</option>
+        <option value="session">At a session</option>
+        <option value="instagram">Instagram</option>
+        <option value="facebook">Facebook</option>
+        <option value="other">Somewhere else</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Add to email list</button>
+  </form>
+
+  <section class="card" aria-labelledby="list-heading">
+    <h2 id="list-heading">Subscribers <span id="subscriber-count"></span></h2>
+    <p>
+      <button type="button" id="email-all-btn" class="btn btn-primary">Email everyone</button>
+      <button type="button" id="export-btn" class="btn">Download list as a file (CSV)</button>
+    </p>
+    <p class="hint">“Email everyone” opens your email app addressed to every
+    active subscriber. Write your news, then send it yourself.</p>
+    <ul id="subscriber-list" class="plain-list"></ul>
+    <p id="subscriber-empty" class="empty" hidden>No one on the list yet.</p>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Easy Photo — free forever. Your email list stays on your device.</p>
+</footer>
+
+<script src="../core/a11y.js"></script>
+<script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="../core/mary-galleries.js"></script>
+<script src="email.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendar — Easy Photo</title>
+<link rel="stylesheet" href="../core/a11y.css">
+<link rel="stylesheet" href="../core/pages.css">
+</head>
+<body>
+<a class="ep-skip-link" href="#main">Skip to main content</a>
+
+<header class="app-header">
+  <p class="brand"><span aria-hidden="true">📷</span> Easy Photo</p>
+  <nav aria-label="Primary">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../galleries/galleries.html">Galleries</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../clients/clients.html">Clients</a></li>
+      <li><a href="../pipeline/pipeline.html">Pipeline</a></li>
+      <li><a href="calendar.html">Calendar</a></li>
+      <li><a href="../email/email.html">Email list</a></li>
+      <li><a href="../website/website.html">Website</a></li>
+      <li><a href="../print/print.html">Print store</a></li>
+      <li><a href="../booking/booking.html">Booking</a></li>
+      <li><a href="../settings/settings.html">Settings</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+  <h1>Calendar</h1>
+  <p>See your sessions and set your availability. Select a day to mark it
+  free, booked, or blocked. Your calendar stays on this device — connect an
+  outside calendar in Settings.</p>
+
+  <div class="toolbar" role="group" aria-label="Calendar navigation">
+    <button type="button" id="prev-month" class="btn">← Previous month</button>
+    <button type="button" id="today-btn" class="btn">Today</button>
+    <button type="button" id="next-month" class="btn">Next month →</button>
+    <h2 id="month-title" tabindex="-1" style="margin:0 0 0 1rem"></h2>
+  </div>
+
+  <table class="cal" id="cal-table">
+    <caption class="sr-only">Calendar month view. Each day is a button that opens the day's details.</caption>
+    <thead><tr>
+      <th scope="col">Sunday</th><th scope="col">Monday</th><th scope="col">Tuesday</th>
+      <th scope="col">Wednesday</th><th scope="col">Thursday</th><th scope="col">Friday</th>
+      <th scope="col">Saturday</th>
+    </tr></thead>
+    <tbody id="cal-body"></tbody>
+  </table>
+
+  <section class="card" id="day-panel" aria-labelledby="day-heading" hidden>
+    <h2 id="day-heading" tabindex="-1"></h2>
+    <div id="day-sessions"></div>
+    <form id="day-form">
+      <fieldset>
+        <legend>Availability for this day</legend>
+        <div class="radio-row">
+          <input type="radio" id="av-free" name="availability" value="free">
+          <label for="av-free">Free — available to book</label>
+        </div>
+        <div class="radio-row">
+          <input type="radio" id="av-booked" name="availability" value="booked">
+          <label for="av-booked">Booked — a session is on this day</label>
+        </div>
+        <div class="radio-row">
+          <input type="radio" id="av-blocked" name="availability" value="blocked">
+          <label for="av-blocked">Blocked — not available</label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="av-note">Note (optional)</label>
+        <input type="text" id="av-note" name="note" autocomplete="off">
+      </div>
+      <button type="submit" class="btn btn-primary">Save availability</button>
+      <button type="button" id="av-clear-btn" class="btn">Clear this day</button>
+    </form>
+  </section>
+
+  <section class="card" aria-labelledby="cal-export-heading">
+    <h2 id="cal-export-heading">Take your calendar with you</h2>
+    <p>
+      <button type="button" id="export-ics-btn" class="btn">Download calendar file (.ics)</button>
+      <label for="import-ics" class="btn" style="display:inline-block">Import calendar file (.ics)</label>
+      <input type="file" id="import-ics" accept=".ics,text/calendar" class="sr-only">
+    </p>
+    <p class="hint">The .ics file works with Google Calendar, Apple Calendar,
+    and Outlook. Importing reads event dates and marks those days booked.</p>
+    <p id="ics-status" role="status"></p>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Easy Photo — free forever. Your calendar stays on your device.</p>
+</footer>
+
+<script src="../core/a11y.js"></script>
+<script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="../core/mary-galleries.js"></script>
+<script src="calendar.js"></script>
+</body>
+</html>

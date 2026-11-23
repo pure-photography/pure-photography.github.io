@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Easy Photo — free app for photographers</title>
+  <meta name="description" content="Easy Photo: the free, accessibility-first studio app for photographers. Client management, private galleries, and a website builder — free forever.">
+  <meta name="theme-color" content="#d6006e">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="core/a11y.css">
+  <link rel="stylesheet" href="core/pages.css">
+  <link rel="stylesheet" href="shell.css">
+  <script>
+    // Apply persisted theme before first paint (no flash). Mirrors core/a11y.js.
+    try {
+      document.documentElement.setAttribute(
+        'data-theme', localStorage.getItem('easy-photo:theme') || 'default');
+    } catch (e) { /* storage unavailable: stay on default theme */ }
+  </script>
+</head>
+<body>
+  <a class="ep-skip-link" href="#main">Skip to main content</a>
+
+  <header class="ep-header">
+    <div class="ep-brand">
+      <img src="icons/icon-192.png" alt="Easy Photo logo" width="40" height="40">
+      <span>Easy Photo</span>
+    </div>
+    <div class="ep-header-actions">
+      <button type="button" id="install-btn" hidden>Install app</button>
+      <button type="button" id="theme-toggle" aria-pressed="false">High contrast: off</button>
+    </div>
+  </header>
+
+  <nav class="ep-nav" aria-label="Primary" id="main-nav" hidden>
+    <ul>
+      <li><a href="index.html" aria-current="page">Dashboard</a></li>
+      <li><a href="galleries/galleries.html">Galleries</a></li>
+      <li><a href="inbox/inbox.html">Inbox</a></li>
+      <li><a href="clients/clients.html">Clients</a></li>
+      <li><a href="pipeline/pipeline.html">Pipeline</a></li>
+      <li><a href="pipeline/payments.html">Payments</a></li>
+      <li><a href="calendar/calendar.html">Calendar</a></li>
+      <li><a href="email/email.html">Email list</a></li>
+      <li><a href="website/website.html">Website</a></li>
+      <li><a href="print/print.html">Print store</a></li>
+      <li><a href="booking/booking.html">Booking</a></li>
+      <li><a href="settings/settings.html">Settings</a></li>
+    </ul>
+  </nav>
+
+  <main id="main" class="ep-main" tabindex="-1">
+
+    <!-- ============================ AUTH VIEWS (signed out) ============================ -->
+    <section id="view-auth" aria-labelledby="auth-title">
+      <h1 id="auth-title">Welcome to Easy Photo</h1>
+      <p>Easy Photo is the free studio app for photographers: private client
+      galleries, a CRM, a website builder, a print store, an email list, and
+      booking — free forever, and built to work with a screen reader. Sign in
+      with your business email and password. Nothing else — no Google, Apple,
+      or social sign-in.</p>
+
+      <div class="auth-tabs" role="group" aria-label="Sign-in choices">
+        <button type="button" id="tab-signin" class="btn btn-primary" aria-pressed="true">Sign in</button>
+        <button type="button" id="tab-signup" class="btn" aria-pressed="false">Create account</button>
+        <button type="button" id="tab-agent" class="btn" aria-pressed="false">Agent sign-in</button>
+        <button type="button" id="tab-owner" class="btn" aria-pressed="false">Owner login (Mary only)</button>
+      </div>
+
+      <!-- Sign in -->
+      <form id="form-signin" class="card" novalidate>
+        <h2>Sign in</h2>
+        <div class="field">
+          <label for="si-email">Business email <span class="required" aria-hidden="true">*</span></label>
+          <input type="email" id="si-email" name="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="si-password">Password <span class="required" aria-hidden="true">*</span></label>
+          <input type="password" id="si-password" name="password" required autocomplete="current-password">
+        </div>
+        <p class="error" id="si-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary">Sign in</button>
+        <p><button type="button" id="forgot-link" class="btn">Forgot password?</button></p>
+      </form>
+
+      <!-- Create account -->
+      <form id="form-signup" class="card" novalidate hidden>
+        <h2>Create your free account</h2>
+        <p>Your account lives on this device, in this browser. No fees, no
+        trial, no card.</p>
+        <div class="field">
+          <label for="su-name">Business name <span class="required" aria-hidden="true">*</span></label>
+          <input type="text" id="su-name" name="name" required autocomplete="organization">
+        </div>
+        <div class="field">
+          <label for="su-email">Business email <span class="required" aria-hidden="true">*</span></label>
+          <input type="email" id="su-email" name="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="su-password">Password <span class="required" aria-hidden="true">*</span></label>
+          <input type="password" id="su-password" name="password" required autocomplete="new-password"
+                 aria-describedby="su-password-hint">
+          <p class="hint" id="su-password-hint">At least 6 characters.</p>
+        </div>
+        <p class="error" id="su-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary">Create account</button>
+      </form>
+
+      <!-- Agent sign-in -->
+      <form id="form-agent" class="card" novalidate hidden>
+        <h2>Agent sign-in</h2>
+        <p>For AI assistants working for a photographer: sign in with the
+        photographer's business email and the agent key the photographer gave
+        you. The agent works only inside that photographer's account, and only
+        on that photographer's behalf. Any AI can use this — Muse, Grok,
+        ChatGPT, or another.</p>
+        <div class="field">
+          <label for="ag-email">Photographer's business email <span class="required" aria-hidden="true">*</span></label>
+          <input type="email" id="ag-email" name="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="ag-key">Agent key <span class="required" aria-hidden="true">*</span></label>
+          <input type="password" id="ag-key" name="key" required autocomplete="off"
+                 aria-describedby="ag-key-hint">
+          <p class="hint" id="ag-key-hint">The key starts with “epk_”. Your
+          photographer creates it in Settings under “Agent access”.</p>
+        </div>
+        <p class="error" id="ag-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary">Sign in as agent</button>
+      </form>
+
+      <!-- Owner login -->
+      <form id="form-owner" class="card" novalidate hidden>
+        <h2>Owner login — Mary only</h2>
+        <p>This signs Mary in with the full photographer experience — galleries,
+        CRM, everything — <strong>plus</strong> the connection to her photography
+        site, <a href="https://pure-photography.github.io">Pure Photography</a>.
+        The connection is off until Mary signs in here, and it turns off again
+        when she signs out. Mary, or Hannah acting for her, can sign in here.</p>
+        <p class="hint">Enter your photography account password (the one for
+        purephotography6@gmail.com). Easy Photo checks it only on this device
+        and never sends it anywhere. It does not sign you into your photography
+        website — Easy Photo has no server that could check it there.</p>
+        <div class="field">
+          <label for="ow-email">Email <span class="required" aria-hidden="true">*</span></label>
+          <input type="email" id="ow-email" name="email" required autocomplete="email" value="purephotography6@gmail.com">
+        </div>
+        <div class="field">
+          <label for="ow-password">Password <span class="required" aria-hidden="true">*</span></label>
+          <input type="password" id="ow-password" name="password" required autocomplete="current-password">
+        </div>
+        <p class="error" id="ow-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary">Sign in as owner</button>
+      </form>
+
+      <!-- Forgot password: request -->
+      <form id="form-forgot" class="card" novalidate hidden>
+        <h2>Forgot your password?</h2>
+        <p>Easy Photo cannot reset passwords by itself — there is no server.
+        Instead, this sends a reset request to Mary, and Hannah will reply to
+        you with a reset code. Enter the business email for your account.</p>
+        <div class="field">
+          <label for="fp-email">Business email <span class="required" aria-hidden="true">*</span></label>
+          <input type="email" id="fp-email" name="email" required autocomplete="email">
+        </div>
+        <p class="error" id="fp-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary">Send reset request to Mary</button>
+        <p id="fp-sent" hidden>Request ready — your email app should have opened
+        with the request addressed to Mary. Press send in your email app. Hannah
+        will reply to your email with a reset code, usually within a day.</p>
+        <p><button type="button" id="fp-have-code-btn" class="btn">I have a reset code</button></p>
+      </form>
+
+      <!-- Forgot password: enter OTP + new password -->
+      <form id="form-reset" class="card" novalidate hidden>
+        <h2>Reset your password</h2>
+        <p>Enter the reset code Hannah sent you, then choose a new password.
+        Easy Photo never generates codes itself — the code comes from Hannah.</p>
+        <div class="field">
+          <label for="rs-email">Business email <span class="required" aria-hidden="true">*</span></label>
+          <input type="email" id="rs-email" name="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="rs-code">Reset code <span class="required" aria-hidden="true">*</span></label>
+          <input type="text" id="rs-code" name="code" required autocomplete="one-time-code" inputmode="numeric"
+                 aria-describedby="rs-code-hint">
+          <p class="hint" id="rs-code-hint">The 6-digit code from Hannah's reply.</p>
+        </div>
+        <div class="field">
+          <label for="rs-password">New password <span class="required" aria-hidden="true">*</span></label>
+          <input type="password" id="rs-password" name="password" required autocomplete="new-password">
+        </div>
+        <p class="error" id="rs-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary">Set new password</button>
+      </form>
+    </section>
+
+    <!-- ============================ DASHBOARD (signed in) ============================ -->
+    <section id="view-dashboard" aria-labelledby="h-dashboard" hidden>
+      <h1 id="h-dashboard">Dashboard</h1>
+      <p id="db-status" role="status">Connecting to your studio database…</p>
+
+      <div id="owner-connection" class="notice" hidden>
+        <h2>Connected to Pure Photography</h2>
+        <p>You are signed in as the owner. This app is connected to your
+        photography site, <a href="https://pure-photography.github.io">Pure Photography</a>.
+        Your past shoots are in your Galleries. The connection turns off when
+        you sign out.</p>
+      </div>
+
+      <div class="card" aria-labelledby="today-heading">
+        <h2 id="today-heading">Today's sessions</h2>
+        <ul id="today-list" class="plain-list"></ul>
+        <p id="today-empty" class="empty" hidden>No sessions today.</p>
+      </div>
+
+      <div class="card" aria-labelledby="balances-heading">
+        <h2 id="balances-heading">Balances due</h2>
+        <ul id="balances-list" class="plain-list"></ul>
+        <p id="balances-empty" class="empty" hidden>No balances due.</p>
+      </div>
+
+      <div class="card" aria-labelledby="leads-heading">
+        <h2 id="leads-heading">New leads</h2>
+        <ul id="leads-list" class="plain-list"></ul>
+        <p id="leads-empty" class="empty" hidden>No new leads.</p>
+        <p><a href="inbox/inbox.html">Open the Inbox</a></p>
+      </div>
+
+      <div class="card" aria-labelledby="quick-heading">
+        <h2 id="quick-heading">Quick links</h2>
+        <ul class="plain-list">
+          <li><a href="galleries/galleries.html">Galleries</a> — <span id="quick-galleries"></span></li>
+          <li><a href="clients/clients.html">Clients</a> — <span id="quick-clients"></span></li>
+          <li><a href="booking/booking.html">Booking form</a> — send it to anyone who wants to book you</li>
+          <li><a href="calendar/calendar.html">Calendar</a> — your availability</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ep-footer">
+    <p>© 2026 Easy Photo — free forever. No app stores, no fees, no accounts required.</p>
+    <p>Easy Photo is home on <a href="https://pure-photography.github.io">Pure Photography</a> — Mary's photography site.</p>
+  </footer>
+
+  <noscript>
+    <p style="padding:1rem;font-weight:bold">Easy Photo needs JavaScript to run
+    your studio database. Please enable JavaScript and reload.</p>
+  </noscript>
+
+  <script src="core/a11y.js"></script>
+  <script src="core/db.js"></script>
+  <script src="core/auth.js"></script>
+  <script src="core/trueai.js"></script>
+  <script src="core/mary-galleries.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

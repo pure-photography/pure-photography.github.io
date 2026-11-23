@@ -1,0 +1,237 @@
+/* Easy Photo — accessibility foundation styles (FOUNDATION workstream)
+ *
+ * Every workstream's CSS must build on these tokens and rules:
+ *  - focus is ALWAYS visible (:focus-visible)
+ *  - skip link appears on keyboard focus
+ *  - high-contrast theme via html[data-theme="high-contrast"]
+ *  - reduced-motion respected
+ *  - status is never conveyed by color alone
+ */
+
+/* ---------- design tokens ---------- */
+:root {
+  --ep-bg: #ffffff;
+  --ep-surface: #f7f4f8;
+  --ep-fg: #1a1a1a;
+  --ep-fg-muted: #4a4a4a;
+  --ep-brand: #d6006e;            /* hot Barbie pink (brand) */
+  --ep-brand-dark: #a30055;
+  --ep-accent: #6c6cd6;           /* periwinkle (brand) */
+  --ep-gold: #8a6d00;
+  --ep-link: #0b5fff;
+  --ep-focus: #005fcc;
+  --ep-success: #1a7a2e;
+  --ep-warning: #8a5a00;
+  --ep-error: #b00020;
+  --ep-border: #767676;
+  --ep-radius: 8px;
+  --ep-touch: 44px;               /* minimum interactive target size */
+}
+
+/* High-contrast theme: max legibility, never color-alone cues */
+html[data-theme="high-contrast"] {
+  --ep-bg: #000000;
+  --ep-surface: #0a0a0a;
+  --ep-fg: #ffffff;
+  --ep-fg-muted: #e8e8e8;
+  --ep-brand: #ff7ab8;
+  --ep-brand-dark: #ff7ab8;
+  --ep-accent: #b9b9ff;
+  --ep-gold: #ffd700;
+  --ep-link: #ffff00;
+  --ep-focus: #ffff00;
+  --ep-success: #7bff9e;
+  --ep-warning: #ffd24d;
+  --ep-error: #ff8a8a;
+  --ep-border: #ffffff;
+}
+
+html[data-theme="high-contrast"] a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+html[data-theme="high-contrast"] img {
+  /* keep photos truthful; add a border so images read as images */
+  border: 2px solid #ffffff;
+}
+
+/* Let the OS high-contrast mode win where it applies */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid Highlight;
+  }
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background: var(--ep-bg);
+  color: var(--ep-fg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---------- visible focus: NEVER remove, only strengthen ---------- */
+:focus-visible {
+  outline: 3px solid var(--ep-focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Some browsers need help on custom widgets */
+[role="button"]:focus-visible,
+[role="link"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--ep-focus);
+  outline-offset: 2px;
+}
+
+/* ---------- skip link ---------- */
+.ep-skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -100px;
+  z-index: 1000;
+  background: var(--ep-fg);
+  color: var(--ep-bg);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--ep-radius);
+  font-weight: 700;
+  text-decoration: none;
+  transition: top 0.15s ease-in;
+}
+.ep-skip-link:focus-visible {
+  top: 0.5rem;
+  outline: 3px solid var(--ep-focus);
+  color: var(--ep-bg);
+}
+
+/* ---------- screen-reader-only utilities ---------- */
+.visually-hidden,
+.ep-live-region {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+/* Live regions must stay in the accessibility tree: never display:none */
+
+/* ---------- touch targets ---------- */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.ep-nav a {
+  min-height: var(--ep-touch);
+  min-width: var(--ep-touch);
+}
+
+/* ---------- links ---------- */
+a { color: var(--ep-link); }
+a:hover { text-decoration-thickness: 2px; }
+
+/* ---------- forms: labels, errors, hints ---------- */
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  color: var(--ep-fg);
+  background: var(--ep-bg);
+  border: 2px solid var(--ep-border);
+  border-radius: var(--ep-radius);
+  padding: 0.5rem 0.75rem;
+  max-width: 100%;
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: var(--ep-error);
+  border-width: 3px;
+}
+
+.ep-field-hint {
+  color: var(--ep-fg-muted);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.ep-field-error {
+  color: var(--ep-error);
+  font-weight: 700;
+  margin-top: 0.25rem;
+  display: flex;
+  gap: 0.4rem;
+  align-items: flex-start;
+}
+html[data-theme="high-contrast"] .ep-field-error { color: var(--ep-error); }
+
+/* ---------- status: NEVER color alone — always icon + text ---------- */
+.ep-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  line-height: 1.4;
+}
+.ep-status[data-tone="success"] { color: var(--ep-success); }
+.ep-status[data-tone="warning"] { color: var(--ep-warning); }
+.ep-status[data-tone="error"]   { color: var(--ep-error); }
+.ep-status[data-tone="info"]    { color: var(--ep-link); }
+html[data-theme="high-contrast"] .ep-status { background: #000; }
+
+/* ---------- buttons ---------- */
+.ep-btn {
+  font: inherit;
+  font-weight: 700;
+  border: 2px solid var(--ep-brand-dark);
+  border-radius: var(--ep-radius);
+  background: var(--ep-brand);
+  color: #ffffff;
+  padding: 0.6rem 1.25rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+html[data-theme="high-contrast"] .ep-btn {
+  background: #000;
+  color: #fff;
+  border-color: #fff;
+}
+.ep-btn--secondary {
+  background: transparent;
+  color: var(--ep-fg);
+  border-color: var(--ep-border);
+}
+
+/* ---------- reduced motion: honor the OS setting ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Booking — Easy Photo</title>
+<link rel="stylesheet" href="../core/a11y.css">
+<link rel="stylesheet" href="../core/pages.css">
+</head>
+<body>
+<a class="ep-skip-link" href="#main">Skip to main content</a>
+
+<header class="app-header">
+  <p class="brand"><span aria-hidden="true">📷</span> Easy Photo</p>
+  <nav aria-label="Primary">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../galleries/galleries.html">Galleries</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../clients/clients.html">Clients</a></li>
+      <li><a href="../pipeline/pipeline.html">Pipeline</a></li>
+      <li><a href="../calendar/calendar.html">Calendar</a></li>
+      <li><a href="../email/email.html">Email list</a></li>
+      <li><a href="../website/website.html">Website</a></li>
+      <li><a href="../print/print.html">Print store</a></li>
+      <li><a href="booking.html" aria-current="page">Booking</a></li>
+      <li><a href="../settings/settings.html">Settings</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+  <h1>Booking</h1>
+
+  <!-- ============================ MANAGE VIEW (photographer, signed in) ============================ -->
+  <section id="view-manage" aria-labelledby="manage-heading">
+    <h2 id="manage-heading" tabindex="-1">Your booking form</h2>
+    <p>Give clients a way to book you. Either make a free booking form here in
+    Easy Photo, or connect the booking form you already have.</p>
+
+    <div id="owner-form-note" class="notice" hidden>
+      <h3>Your booking form lives on your photography site</h3>
+      <p>Your booking form is the one on <a href="https://pure-photography.github.io/booking.html" target="_blank" rel="noopener">your photography website (opens in a new tab)</a>.
+      It is the same form the app uses — one shared form, not a copy. Send it
+      to anyone who wants to book you with the tools below.</p>
+    </div>
+
+    <div class="card">
+      <h3>Choose how to offer bookings</h3>
+      <p>
+        <button type="button" id="choose-make-btn" class="btn btn-primary">Make a free booking form</button>
+        <button type="button" id="choose-connect-btn" class="btn">Connect a booking form I already have</button>
+      </p>
+      <p class="hint">“Make” builds a booking form inside Easy Photo that
+      sends bookings straight to your Inbox. “Connect” links the booking form
+      you already use somewhere else.</p>
+    </div>
+
+    <form id="make-form" class="card" novalidate hidden>
+      <h3>Make a free booking form</h3>
+      <div class="field">
+        <label for="bf-title">Form title <span class="required" aria-hidden="true">*</span></label>
+        <input type="text" id="bf-title" name="title" required autocomplete="off"
+               aria-describedby="bf-title-hint bf-title-error">
+        <p class="hint" id="bf-title-hint">For example: “Book a session with me”.</p>
+        <p class="error" id="bf-title-error" role="alert" hidden></p>
+      </div>
+      <fieldset>
+        <legend>Shoot types to offer</legend>
+        <div class="check-row"><input type="checkbox" id="st-portrait" value="Portrait" checked><label for="st-portrait">Portrait</label></div>
+        <div class="check-row"><input type="checkbox" id="st-couples" value="Couples" checked><label for="st-couples">Couples</label></div>
+        <div class="check-row"><input type="checkbox" id="st-family" value="Family" checked><label for="st-family">Family</label></div>
+        <div class="check-row"><input type="checkbox" id="st-senior" value="Senior portraits"><label for="st-senior">Senior portraits</label></div>
+        <div class="check-row"><input type="checkbox" id="st-pets" value="Pet portraits"><label for="st-pets">Pet portraits</label></div>
+        <div class="check-row"><input type="checkbox" id="st-baptism" value="Angel Shoot (Baptism)"><label for="st-baptism">Angel Shoot (Baptism)</label></div>
+        <div class="check-row"><input type="checkbox" id="st-dedication" value="Baby Dedication Shoot"><label for="st-dedication">Baby Dedication Shoot</label></div>
+        <div class="check-row"><input type="checkbox" id="st-other" value="Other"><label for="st-other">Other</label></div>
+      </fieldset>
+      <p class="hint">Your form always asks “How do you want to receive your
+      gallery?” with four choices: via email, via text, via email a gallery
+      link, or via text a gallery link.</p>
+      <button type="submit" class="btn btn-primary">Create my booking form</button>
+    </form>
+
+    <form id="connect-form" class="card" novalidate hidden>
+      <h3>Connect a booking form you already have</h3>
+      <div class="field">
+        <label for="cf-url">Your booking form address <span class="required" aria-hidden="true">*</span></label>
+        <input type="url" id="cf-url" name="url" placeholder="https://example.com/book" required
+               aria-describedby="cf-url-error">
+        <p class="error" id="cf-url-error" role="alert" hidden></p>
+      </div>
+      <button type="submit" class="btn btn-primary">Connect this booking form</button>
+    </form>
+
+    <section class="card" aria-labelledby="forms-heading">
+      <h3 id="forms-heading">Your booking forms</h3>
+      <ul id="form-list" class="plain-list"></ul>
+      <p id="form-list-empty" class="empty" hidden>No booking form yet. Make one or connect one above.</p>
+    </section>
+
+    <section class="card" aria-labelledby="send-heading">
+      <h3 id="send-heading">Send the booking form to someone</h3>
+      <p>When someone is interested in booking, send them your booking form
+      straight from here.</p>
+      <div class="field">
+        <label for="send-link">Booking form link</label>
+        <input type="text" id="send-link" readonly style="width:100%;max-width:32rem">
+      </div>
+      <p><button type="button" id="copy-send-link-btn" class="btn">Copy booking form link</button></p>
+      <div class="field">
+        <label for="send-phone">Their phone number (to send by text)</label>
+        <input type="tel" id="send-phone" name="phone" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label for="send-email">Their email address (to send by email)</label>
+        <input type="email" id="send-email" name="email" autocomplete="email">
+      </div>
+      <p>
+        <a id="send-text-btn" class="btn btn-primary" href="#">Send by text</a>
+        <a id="send-email-btn" class="btn btn-primary" href="#">Send by email</a>
+      </p>
+      <p id="send-status" role="status"></p>
+    </section>
+  </section>
+
+  <!-- ============================ CLIENT VIEW (public, ?form=<id>) ============================ -->
+  <section id="view-client" aria-labelledby="client-form-title" hidden>
+    <h2 id="client-form-title" tabindex="-1"></h2>
+    <p id="client-form-intro"></p>
+    <form id="client-form" class="card" novalidate>
+      <div class="field">
+        <label for="cb-name">Your name <span class="required" aria-hidden="true">*</span></label>
+        <input type="text" id="cb-name" name="name" required autocomplete="name"
+               aria-describedby="cb-name-error">
+        <p class="error" id="cb-name-error" role="alert" hidden></p>
+      </div>
+      <div class="field">
+        <label for="cb-email">Email address <span class="required" aria-hidden="true">*</span></label>
+        <input type="email" id="cb-email" name="email" required autocomplete="email"
+               aria-describedby="cb-email-error">
+        <p class="error" id="cb-email-error" role="alert" hidden></p>
+      </div>
+      <div class="field">
+        <label for="cb-phone">Phone <span class="fine">(required if you choose a text option below)</span></label>
+        <input type="tel" id="cb-phone" name="phone" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label for="cb-type">Shoot type <span class="required" aria-hidden="true">*</span></label>
+        <select id="cb-type" name="type" required></select>
+      </div>
+      <div class="field">
+        <label for="cb-date">Preferred date <span class="required" aria-hidden="true">*</span></label>
+        <input type="date" id="cb-date" name="date" required>
+      </div>
+      <fieldset>
+        <legend>How do you want to receive your gallery?</legend>
+        <div class="radio-row">
+          <input type="radio" id="gd-email" name="galleryDelivery" value="email" required>
+          <label for="gd-email">Via email</label>
+        </div>
+        <div class="radio-row">
+          <input type="radio" id="gd-text" name="galleryDelivery" value="text">
+          <label for="gd-text">Via text</label>
+        </div>
+        <div class="radio-row">
+          <input type="radio" id="gd-email-link" name="galleryDelivery" value="email-link">
+          <label for="gd-email-link">Via email a gallery link</label>
+        </div>
+        <div class="radio-row">
+          <input type="radio" id="gd-text-link" name="galleryDelivery" value="text-link">
+          <label for="gd-text-link">Via text a gallery link</label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="cb-message">What are you imagining?</label>
+        <textarea id="cb-message" name="message"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Send booking request</button>
+      <p id="client-status" role="status"></p>
+    </form>
+    <div id="client-confirmation" class="notice" hidden>
+      <h3>Booking request sent!</h3>
+      <p id="client-confirmation-text"></p>
+    </div>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Easy Photo — free forever.</p>
+</footer>
+
+<script src="../core/a11y.js"></script>
+<script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="booking.js"></script>
+</body>
+</html>

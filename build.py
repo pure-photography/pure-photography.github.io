@@ -279,6 +279,7 @@ def nav_html(current_key):
     for key, meta in PAGES.items():
         cur = ' aria-current="page"' if key == current_key else ''
         items.append(f'<li><a href="{meta["file"]}"{cur}>{html.escape(meta["nav"])}</a></li>')
+    items.append('<li><a href="easy-photo/">Easy Photo — free app for photographers</a></li>')
     return '<nav aria-label="Main navigation">\n    <ul>\n      ' + '\n      '.join(items) + '\n    </ul>\n  </nav>'
 
 

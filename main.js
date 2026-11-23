@@ -81,6 +81,8 @@
     const phoneInput = document.querySelector('#phone');
     const deliveryEmail = document.querySelector('#gallery-by-email');
     const deliveryText = document.querySelector('#gallery-by-text');
+    const deliveryEmailLink = document.querySelector('#gallery-by-email-link');
+    const deliveryTextLink = document.querySelector('#gallery-by-text-link');
     const dateInput = document.querySelector('#date');
     const waiverField = document.querySelector('#waiver-field');
     const waiverAgree = document.querySelector('#waiver-agree');
@@ -99,11 +101,11 @@
     } catch (e) {}
 
     function updateGalleryDelivery() {
-      const textSelected = deliveryText.checked;
+      const textSelected = (deliveryText && deliveryText.checked) || (deliveryTextLink && deliveryTextLink.checked);
       phoneInput.required = textSelected;
     }
 
-    [deliveryEmail, deliveryText].forEach(control => control.addEventListener('change', updateGalleryDelivery));
+    [deliveryEmail, deliveryText, deliveryEmailLink, deliveryTextLink].filter(Boolean).forEach(control => control.addEventListener('change', updateGalleryDelivery));
     updateGalleryDelivery();
 
     // Newborn/infant waiver: only shown when that shoot type is chosen.
@@ -143,7 +145,11 @@
         phone: (f.elements.phone.value || '').trim() || 'Not provided',
         type: f.elements.type.value,
         date: f.elements.date.value,
-        gallery: deliveryEmail.checked ? 'Email' : 'Text',
+        gallery: (function () {
+          const picked = document.querySelector('input[name="galleryDelivery"]:checked');
+          const labels = { email: 'Via email', text: 'Via text', 'email-link': 'Via email a gallery link', 'text-link': 'Via text a gallery link' };
+          return picked ? (labels[picked.value] || picked.value) : 'Via email';
+        })(),
         message: f.elements.message.value.trim(),
         waiver: !!(waiverAgree && waiverAgree.checked)
       };

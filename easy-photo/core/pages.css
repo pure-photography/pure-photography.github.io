@@ -1,0 +1,257 @@
+/* Easy Photo — shared page styles for v1 workstreams (galleries, email,
+ * website, print store, calendar, booking, settings).
+ * Builds on core/a11y.css tokens so the high-contrast theme just works.
+ * Every view: one <h1>, labeled controls, status never by color alone. */
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--ep-bg);
+  color: var(--ep-fg);
+  line-height: 1.5;
+}
+
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--ep-surface);
+  border-bottom: 3px solid var(--ep-brand);
+}
+
+.app-header .brand {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.app-header nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.app-header nav a {
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  font-weight: 700;
+  border-radius: var(--ep-radius);
+}
+
+.app-header nav a[aria-current="page"] {
+  background: var(--ep-brand);
+  color: #fff;
+  text-decoration: none;
+}
+
+main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+}
+
+.card {
+  background: var(--ep-surface);
+  border: 1px solid var(--ep-border);
+  border-radius: var(--ep-radius);
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+}
+
+.notice {
+  background: var(--ep-surface-muted);
+  border: 1px solid var(--ep-border);
+  border-left: 4px solid var(--ep-brand);
+  border-radius: var(--ep-radius);
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+
+.notice h2 { margin-top: 0; font-size: 1.1rem; }
+
+.field { margin: 0.75rem 0; }
+.field > label,
+.field > legend { display: block; font-weight: 700; margin-bottom: 0.25rem; }
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="tel"],
+.field input[type="url"],
+.field input[type="date"],
+.field input[type="password"],
+.field select,
+.field textarea {
+  width: 100%;
+  max-width: 32rem;
+  font: inherit;
+  color: var(--ep-fg);
+  background: var(--ep-bg);
+  border: 2px solid var(--ep-border);
+  border-radius: var(--ep-radius);
+  padding: 0.5rem 0.6rem;
+}
+.field textarea { min-height: 6rem; }
+.field .hint { margin: 0.25rem 0 0; color: var(--ep-fg-muted); font-size: 0.95rem; }
+.field .error { margin: 0.25rem 0 0; color: var(--ep-danger, #b00020); font-weight: 700; }
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"],
+.field textarea[aria-invalid="true"] { border-color: var(--ep-danger, #b00020); }
+.required { color: var(--ep-danger, #b00020); }
+
+fieldset { border: 2px solid var(--ep-border); border-radius: var(--ep-radius); margin: 0.75rem 0; padding: 0.75rem 1rem; }
+fieldset legend { font-weight: 700; padding: 0 0.4rem; }
+.radio-row, .check-row { display: flex; gap: 0.5rem; align-items: flex-start; margin: 0.5rem 0; }
+.radio-row input, .check-row input { width: 1.25rem; height: 1.25rem; flex: none; margin-top: 0.15rem; }
+.radio-row label, .check-row label { font-weight: 400; }
+
+.btn {
+  font: inherit;
+  font-weight: 700;
+  min-height: var(--ep-touch);
+  padding: 0.5rem 1rem;
+  border-radius: var(--ep-radius);
+  border: 2px solid var(--ep-border);
+  background: var(--ep-surface);
+  color: var(--ep-fg);
+  cursor: pointer;
+}
+.btn-primary {
+  background: var(--ep-brand);
+  border-color: var(--ep-brand);
+  color: #fff;
+}
+.btn-danger { border-color: var(--ep-danger, #b00020); color: var(--ep-danger, #b00020); }
+.btn + .btn { margin-left: 0.5rem; }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: end; margin: 1rem 0; }
+.toolbar .field { margin: 0; }
+
+ul.plain-list, ol.plain-list { list-style: none; margin: 0; padding: 0; }
+ul.plain-list > li { border-bottom: 1px solid var(--ep-border); padding: 0.75rem 0; }
+ul.plain-list > li:last-child { border-bottom: none; }
+
+.empty { color: var(--ep-fg-muted); font-style: italic; }
+
+table.data { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+table.data th, table.data td {
+  border: 1px solid var(--ep-border);
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+}
+table.data th { background: var(--ep-surface-muted); }
+
+/* Gallery photo grid: image + its alt text, always shown as text too. */
+.photo-grid {
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.photo-grid li {
+  border: 1px solid var(--ep-border);
+  border-radius: var(--ep-radius);
+  overflow: hidden;
+  background: var(--ep-surface);
+}
+.photo-grid img { display: block; width: 100%; height: 12rem; object-fit: cover; }
+.photo-grid .photo-meta { padding: 0.6rem 0.75rem; }
+.photo-grid .photo-meta p { margin: 0.25rem 0; }
+.photo-grid .photo-alt { font-size: 0.95rem; }
+
+/* Calendar month grid. */
+.cal { border-collapse: collapse; width: 100%; }
+.cal th, .cal td { border: 1px solid var(--ep-border); padding: 0.4rem; vertical-align: top; height: 4.5rem; }
+.cal th { background: var(--ep-surface-muted); text-align: center; }
+.cal td button {
+  font: inherit; font-weight: 700;
+  background: none; border: none; cursor: pointer;
+  padding: 0.25rem; border-radius: var(--ep-radius);
+}
+.cal td .cal-note { display: block; font-size: 0.85rem; margin-top: 0.25rem; }
+.cal td[data-status="booked"] { background: #fdeef3; }
+.cal td[data-status="blocked"] { background: #f3f3f3; }
+html[data-theme="high-contrast"] .cal td[data-status="booked"],
+html[data-theme="high-contrast"] .cal td[data-status="blocked"] { background: transparent; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+footer.app-footer {
+  border-top: 3px solid var(--ep-brand);
+  padding: 1rem;
+  text-align: center;
+  color: var(--ep-fg-muted);
+  font-size: 0.95rem;
+}
+
+/* Website question buttons (Mary's spec): YES is purple, NO is red.
+ * Both are rectangles. The text label carries the meaning for screen
+ * readers; color is only an extra visual cue, never the only cue. */
+.btn-yes-purple {
+  background: #6b21a8;
+  border-color: #6b21a8;
+  color: #fff;
+  border-radius: 0;
+  min-width: 8rem;
+}
+.btn-no-red {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  color: #fff;
+  border-radius: 0;
+  min-width: 8rem;
+}
+html[data-theme="high-contrast"] .btn-yes-purple,
+html[data-theme="high-contrast"] .btn-no-red {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Watermark shown across client gallery photos (visible label, not baked
+ * into the file). Decorative for screen readers — the alt text describes
+ * the photo. */
+.photo-wrap { position: relative; }
+.photo-wrap img { display: block; width: 100%; height: 12rem; object-fit: cover; }
+.photo-watermark {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  padding: 2px 8px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* Signed-in user bar (injected by core/auth.js into the page header). */
+.ep-userbar {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  border-top: 1px solid var(--ep-border);
+}
+
+/* Auth view tabs on the home page. */
+.auth-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.auth-tabs .btn + .btn { margin-left: 0; }

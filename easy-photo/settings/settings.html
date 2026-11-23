@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings — Easy Photo</title>
+<link rel="stylesheet" href="../core/a11y.css">
+<link rel="stylesheet" href="../core/pages.css">
+</head>
+<body>
+<a class="ep-skip-link" href="#main">Skip to main content</a>
+
+<header class="app-header">
+  <p class="brand"><span aria-hidden="true">📷</span> Easy Photo</p>
+  <nav aria-label="Primary">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../galleries/galleries.html">Galleries</a></li>
+      <li><a href="../inbox/inbox.html">Inbox</a></li>
+      <li><a href="../clients/clients.html">Clients</a></li>
+      <li><a href="../pipeline/pipeline.html">Pipeline</a></li>
+      <li><a href="../calendar/calendar.html">Calendar</a></li>
+      <li><a href="../email/email.html">Email list</a></li>
+      <li><a href="../website/website.html">Website</a></li>
+      <li><a href="../print/print.html">Print store</a></li>
+      <li><a href="../booking/booking.html">Booking</a></li>
+      <li><a href="settings.html" aria-current="page">Settings</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+  <h1>Settings</h1>
+  <p>Connections, your AI helper, and your data. Everything here is stored on
+  this device only — Easy Photo has no server, so nothing leaves your device
+  unless you send it yourself.</p>
+
+  <section class="card" aria-labelledby="ai-heading">
+    <h2 id="ai-heading">Your AI helper</h2>
+    <p>Connect the AI you already use — Grok, Claude, Muse, ChatGPT, or
+    another one. Easy Photo does not talk to the AI for you; it prepares
+    drafts and prompts you can paste into your AI.</p>
+    <form id="ai-form">
+      <div class="field">
+        <label for="ai-provider">Which AI do you use?</label>
+        <select id="ai-provider" name="provider">
+          <option value="">None yet</option>
+          <option value="grok">Grok</option>
+          <option value="claude">Claude</option>
+          <option value="muse">Muse</option>
+          <option value="chatgpt">ChatGPT</option>
+          <option value="other">Another AI</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="ai-other">If “Another AI,” which one?</label>
+        <input type="text" id="ai-other" name="other" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="ai-key">Your AI's key (optional)</label>
+        <input type="password" id="ai-key" name="key" autocomplete="off"
+               aria-describedby="ai-key-hint">
+        <p class="hint" id="ai-key-hint">Saved on this device only, never sent
+        anywhere by Easy Photo. Only fill this in if your AI asks for a key.</p>
+      </div>
+      <button type="submit" class="btn btn-primary">Save AI choice</button>
+    </form>
+    <h3>Draft a reply with your AI</h3>
+    <p>Pick a lead, and Easy Photo writes a prompt you can paste into your AI
+    to draft the reply.</p>
+    <form id="ai-draft-form">
+      <div class="field">
+        <label for="ai-lead">Lead to reply to</label>
+        <select id="ai-lead" name="lead">
+          <option value="">Choose a lead</option>
+        </select>
+      </div>
+      <button type="submit" class="btn">Build a prompt for my AI</button>
+    </form>
+    <div class="field">
+      <label for="ai-prompt">Prompt to paste into your AI</label>
+      <textarea id="ai-prompt" readonly aria-describedby="ai-prompt-hint"></textarea>
+      <p class="hint" id="ai-prompt-hint">Copy this into your AI, and it will
+      draft the reply in your voice.</p>
+    </div>
+    <p><button type="button" id="ai-copy-btn" class="btn">Copy prompt</button></p>
+  </section>
+
+  <section class="card" aria-labelledby="editors-heading">
+    <h2 id="editors-heading">Editors and calendar</h2>
+    <form id="editors-form">
+      <div class="field">
+        <label for="ed-lightroom">Photo editor you use (Lightroom, Aftershoot, or another)</label>
+        <input type="text" id="ed-lightroom" name="editor" autocomplete="off"
+               aria-describedby="ed-lightroom-hint">
+        <p class="hint" id="ed-lightroom-hint">For example: Lightroom, Aftershoot.</p>
+      </div>
+      <div class="field">
+        <label for="ed-video">Video editor you use</label>
+        <input type="text" id="ed-video" name="videoEditor" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="ed-calendar">Your outside calendar (Google Calendar, Apple Calendar, or another)</label>
+        <input type="text" id="ed-calendar" name="calendar" autocomplete="off"
+               aria-describedby="ed-calendar-hint">
+        <p class="hint" id="ed-calendar-hint">Easy Photo keeps its own calendar
+        on this device. Use the Calendar page to download a .ics file for your
+        outside calendar, or import one back.</p>
+      </div>
+      <button type="submit" class="btn btn-primary">Save editors and calendar</button>
+    </form>
+  </section>
+
+  <section class="card" aria-labelledby="delivery-heading">
+    <h2 id="delivery-heading">Gallery delivery — how your clients get their photos</h2>
+    <p>Choose your own way. Mary's business delivers proofs first — 6 proofs,
+    then the full gallery, always, no matter what the client says about the
+    proofs. Other photographers pick what suits their business.</p>
+    <form id="delivery-form">
+      <fieldset>
+        <legend>How do you deliver galleries?</legend>
+        <div class="radio-row">
+          <input type="radio" id="gd-proofs" name="deliveryMode" value="proofs-first">
+          <label for="gd-proofs">Proofs first — send 6 proofs, then the full gallery (the full gallery always follows)</label>
+        </div>
+        <div class="radio-row">
+          <input type="radio" id="gd-full" name="deliveryMode" value="full">
+          <label for="gd-full">Full gallery straight away</label>
+        </div>
+      </fieldset>
+      <button type="submit" class="btn btn-primary">Save delivery choice</button>
+    </form>
+  </section>
+
+  <section class="card" aria-labelledby="trueai-heading">
+    <h2 id="trueai-heading">True AI — how gallery messages go out</h2>
+    <p>True AI is your virtual receptionist. It writes the branded gallery
+    emails and text messages for you. <strong>Where each message goes:</strong>
+    email goes through your connected email below — True AI composes the
+    invite and opens it in your own email app, and you press send. Text goes
+    through your phone's texting app the same way. Easy Photo has no server,
+    so True AI cannot send anything by itself, and nothing is sent silently.</p>
+    <form id="trueai-form">
+      <div class="field">
+        <label for="ta-sender">Connected email — the email your gallery invites go from</label>
+        <input type="email" id="ta-sender" name="sender" autocomplete="email"
+               aria-describedby="ta-sender-hint">
+        <p class="hint" id="ta-sender-hint">Usually your business email. This
+        is the account your email app sends from when True AI opens an invite.</p>
+      </div>
+      <div class="field">
+        <label for="ta-business">Business name for gallery messages</label>
+        <input type="text" id="ta-business" name="business" autocomplete="organization">
+      </div>
+      <button type="submit" class="btn btn-primary">Save True AI settings</button>
+    </form>
+  </section>
+
+  <section class="card" aria-labelledby="agent-heading">
+    <h2 id="agent-heading">Agent access — let an AI work for you</h2>
+    <p>Your AI assistant — Muse, Grok, ChatGPT, or any other AI — can sign in
+    to Easy Photo and do your work for you: galleries, clients, bookings, and
+    everything else you can do. Each agent gets its own key, tied to
+    <strong>your account only</strong>. An agent can never reach another
+    photographer's account.</p>
+    <p>To authorize an agent: create a key below, copy it once, and give it to
+    your agent along with your business email. The agent signs in on the
+    sign-in screen under “Agent sign-in.” You can revoke a key any time.</p>
+    <form id="agent-form">
+      <div class="field">
+        <label for="agent-name">Name this agent <span class="required" aria-hidden="true">*</span></label>
+        <input type="text" id="agent-name" name="name" required autocomplete="off"
+               aria-describedby="agent-name-hint agent-name-error">
+        <p class="hint" id="agent-name-hint">For example: “Hannah” or “My Grok assistant”.</p>
+        <p class="error" id="agent-name-error" role="alert" hidden></p>
+      </div>
+      <button type="submit" class="btn btn-primary">Create agent key</button>
+    </form>
+    <div id="agent-key-result" class="notice" hidden>
+      <h3>Your new agent key — copy it now</h3>
+      <p>This key is shown <strong>once</strong>. Easy Photo stores only a
+      scrambled fingerprint of it, never the key itself. If you lose it, revoke
+      it below and create a new one.</p>
+      <p><label for="agent-key-value">Agent key</label><br>
+      <input type="text" id="agent-key-value" readonly style="width:100%;max-width:32rem"></p>
+      <p><button type="button" id="agent-key-copy-btn" class="btn">Copy agent key</button></p>
+    </div>
+    <h3>Your agent keys</h3>
+    <ul id="agent-list" class="plain-list"></ul>
+    <p id="agent-empty" class="empty" hidden>No agent keys yet.</p>
+  </section>
+
+  <section class="card" aria-labelledby="data-heading">
+    <h2 id="data-heading">Your data</h2>
+    <p>Your studio data lives in this browser, on this device. Back it up
+    regularly — if you clear this browser's data, your studio data goes with
+    it. Photos themselves are not included in the backup file; use each
+    gallery's Download button for those.</p>
+    <p>
+      <button type="button" id="export-data-btn" class="btn btn-primary">Download a backup of my data</button>
+      <label for="import-data" class="btn" style="display:inline-block">Restore from a backup file</label>
+      <input type="file" id="import-data" accept=".json,application/json" class="sr-only">
+    </p>
+    <p id="data-status" role="status"></p>
+    <h3>Start over</h3>
+    <p><button type="button" id="wipe-btn" class="btn btn-danger">Erase everything on this device</button></p>
+    <p class="hint">This deletes all clients, sessions, leads, galleries,
+    subscribers, and settings stored in this browser. It cannot be undone.</p>
+  </section>
+
+  <section class="card" aria-labelledby="storage-heading">
+    <h2 id="storage-heading">About storage — the honest version</h2>
+    <p>Easy Photo is free, and there is no free unlimited cloud storage
+    anywhere — photos have to live somewhere, and servers cost money. So your
+    photos stay on your device, in this browser. The gallery tool, the CRM,
+    the website builder, and everything else in this app are free. You bring
+    your own storage: your device, your hard drive, and the print store and
+    website you choose.</p>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Easy Photo — free forever. Your settings stay on your device.</p>
+</footer>
+
+<script src="../core/a11y.js"></script>
+<script src="../core/db.js"></script>
+<script src="../core/auth.js"></script>
+<script src="settings.js"></script>
+</body>
+</html>
