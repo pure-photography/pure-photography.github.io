@@ -222,6 +222,42 @@
     announce('Paste your website address in the box, then choose “Connect this website”.');
   });
 
+  /* ---------- "My website is already connected" ----------
+   * For photographers whose AI agent already connected their website for
+   * them (the agent did it on the live site). One tap marks the website
+   * as connected here — no searching, no pasting, no connect flow. The
+   * saved address, if the app already knows it, is shown in the note. */
+  var alreadyConnectedBtn = document.getElementById('already-connected-btn');
+  var alreadyConnectedNote = document.getElementById('already-connected-note');
+  var alreadyConnectedText = document.getElementById('already-connected-text');
+
+  function showAlreadyConnected(url) {
+    alreadyConnectedText.textContent = url
+      ? 'Your AI agent connected it for you: ' + url + '. There is nothing more to do here.'
+      : 'Your AI agent connected it for you, so there is nothing more to do here.';
+    alreadyConnectedNote.hidden = false;
+  }
+
+  alreadyConnectedBtn.addEventListener('click', function () {
+    window.db.settings.set('website.hasWebsite', 'yes').then(function () {
+      return window.db.settings.set('website.agentConnected', 'yes');
+    }).then(function () {
+      return window.db.settings.get('website.url');
+    }).then(function (url) {
+      showAlreadyConnected(url);
+      if (alreadyConnectedNote.scrollIntoView) alreadyConnectedNote.scrollIntoView();
+      announce('Your website is marked as connected.');
+    });
+  });
+
+  /* Restore the agent-connected confirmation on reload. */
+  window.db.settings.get('website.agentConnected').then(function (flag) {
+    if (!flag) return;
+    window.db.settings.get('website.url').then(function (url) {
+      showAlreadyConnected(url);
+    });
+  });
+
   /* Owner: her site is already connected. */
   if (EasyPhoto.auth.isOwner()) {
     document.getElementById('owner-site-note').hidden = false;
