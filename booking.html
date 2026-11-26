@@ -75,6 +75,73 @@
           <p><a class="button" href="https://py.pl/6Hw6wyUp7yJTJQjco26pkg" target="_blank" rel="noopener noreferrer" aria-label="Pay your 20 dollar booking fee using PayPal (opens in a new tab)">Pay Your $20 Booking Fee Using PayPal</a></p>
           <p class="fine">No PayPal account? No problem — you can still pay with any debit or credit card through the PayPal link.</p>
         </div>
+        <div class="gift-grid">
+          <div class="gift-panel">
+            <h2 id="gift-title">Give the gift of photos!</h2>
+            <p>Book a $50 shoot for someone you love — they'll just pay the $20 retainer when they schedule their session. Available through December 23rd!</p>
+            <p><a class="button" href="https://py.pl/JDEnyVJXSwSuaNNDKGJ7OQ" target="_blank" rel="noopener noreferrer" aria-label="Pay 50 dollars for a gift shoot using PayPal (opens in a new tab)">Pay $50 for a Gift Shoot Using PayPal</a></p>
+            <p class="fine">No PayPal account? No problem — you can still pay with any debit or credit card through the PayPal link.</p>
+            <div class="gift-message" id="gift-message"><p>You've been gifted a photo shoot with Pure Photography! Fill out this form to book your session: https://pure-photography.github.io/booking.html. You'll just pay the $20 retainer when you book.</p></div>
+            <div class="gift-actions"><button class="button secondary" type="button" id="copy-gift-message">Copy message</button><p class="copy-status" id="copy-gift-status" role="status" aria-live="polite"></p></div>
+            <p class="fine">Copy the message above, then paste it into a text or email to the person you're gifting the shoot to.</p>
+          </div>
+          <div class="gift-panel">
+            <h2 id="redeem-title">Redeem a gifted shoot</h2>
+            <p>Good news! Your shoot fee is already covered — you just need to pay the $20 retainer to lock in your date.</p>
+            <p><a class="button" href="https://py.pl/6Hw6wyUp7yJTJQjco26pkg" target="_blank" rel="noopener noreferrer" aria-label="Pay your 20 dollar retainer using PayPal (opens in a new tab)">Pay Your $20 Retainer Using PayPal</a></p>
+            <p class="fine">No PayPal account? No problem — you can still pay with any debit or credit card through the PayPal link.</p>
+            <p><button class="button secondary" type="button" id="gift-go-to-form">Go to the booking form</button></p>
+          </div>
+        </div>
+        <script>
+        /* Gift booking: copy the gift message, and scroll to the booking form. */
+        (function () {
+          'use strict';
+          var copyBtn = document.getElementById('copy-gift-message');
+          var msg = document.getElementById('gift-message');
+          var status = document.getElementById('copy-gift-status');
+          function setStatus(text) { if (status) status.textContent = text; }
+          function fallbackCopy(text) {
+            try {
+              var ta = document.createElement('textarea');
+              ta.value = text;
+              ta.setAttribute('readonly', '');
+              ta.style.position = 'absolute';
+              ta.style.left = '-9999px';
+              document.body.appendChild(ta);
+              ta.select();
+              var ok = document.execCommand('copy');
+              document.body.removeChild(ta);
+              setStatus(ok ? 'Message copied — paste it into a text or email.' : 'Copy didn’t work — select the message text and copy it manually.');
+            } catch (e) {
+              setStatus('Copy didn’t work — select the message text and copy it manually.');
+            }
+          }
+          if (copyBtn && msg) {
+            copyBtn.addEventListener('click', function () {
+              var text = msg.innerText || msg.textContent;
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function () {
+                  setStatus('Message copied — paste it into a text or email.');
+                }, function () { fallbackCopy(text); });
+              } else {
+                fallbackCopy(text);
+              }
+            });
+          }
+          var goBtn = document.getElementById('gift-go-to-form');
+          if (goBtn) {
+            goBtn.addEventListener('click', function () {
+              var form = document.getElementById('booking-form');
+              if (!form) return;
+              var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              form.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+              var name = document.getElementById('name');
+              if (name) { try { name.focus({ preventScroll: true }); } catch (e) { name.focus(); } }
+            });
+          }
+        })();
+        </script>
       </div>
     </section>
 

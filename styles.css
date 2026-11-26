@@ -100,3 +100,12 @@ body.modal-open{overflow:hidden}
 .contract-modal-close:hover{background:var(--accent-soft)}
 .booking-confirmation{margin:1.5rem 0;padding:1.2rem 1.4rem;border-top:3px solid var(--accent);background:var(--surface)}
 .booking-confirmation h3{margin:0 0 .5rem;font-size:1.3rem}
+.booking-inner>.gift-grid{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.25rem,3vw,2rem);margin-top:1rem}
+.gift-panel{background:var(--surface);border-top:3px solid var(--accent);padding:clamp(1.2rem,3vw,2rem);box-shadow:var(--shadow)}
+.gift-panel h2{font-family:'Libre Baskerville',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:400;line-height:1.15;margin:.2rem 0 1rem}
+.gift-panel p{color:var(--muted)}
+.gift-panel .button{margin:.25rem 0}
+.gift-message{background:var(--bg);border:1px solid var(--line);border-radius:.3rem;padding:1rem;margin:1rem 0;overflow-wrap:anywhere}
+.gift-message p{margin:0;color:var(--ink)}
+.gift-actions{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;margin-top:1rem}
+@media(max-width:900px){.gift-grid{grid-template-columns:1fr}}
